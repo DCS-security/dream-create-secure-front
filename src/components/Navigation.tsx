@@ -19,7 +19,7 @@ const Navigation = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 flex-shrink-0">
             <div className="p-2 bg-cyber-500/10 rounded-lg">
               <Shield className="h-6 w-6 text-cyber-500" />
             </div>
@@ -28,21 +28,23 @@ const Navigation = () => {
             </span>
           </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                className="text-muted-foreground hover:text-cyber-400 transition-colors duration-200"
-              >
-                {item.label}
-              </a>
-            ))}
+          {/* Desktop Navigation - Centered */}
+          <div className="hidden md:flex items-center justify-center flex-1">
+            <div className="flex items-center space-x-8">
+              {navItems.map((item) => (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  className="text-muted-foreground hover:text-cyber-400 transition-colors duration-200"
+                >
+                  {item.label}
+                </a>
+              ))}
+            </div>
           </div>
 
           {/* CTA Button */}
-          <div className="hidden md:block">
+          <div className="hidden md:block flex-shrink-0">
             <Button className="bg-cyber-500 hover:bg-cyber-600 text-white">
               Get Started
             </Button>
