@@ -1,5 +1,5 @@
 
-import { Shield } from 'lucide-react';
+import { Shield, Mail, Phone, MapPin } from 'lucide-react';
 
 const Footer = () => {
   const footerLinks = {
@@ -47,6 +47,20 @@ const Footer = () => {
               Pioneering the future of cybersecurity through AI, ML, and innovative security solutions. 
               Dream. Create. Secure.
             </p>
+            <div className="space-y-3">
+              <div className="flex items-center space-x-3 text-sm text-muted-foreground">
+                <Mail className="h-4 w-4 text-cyber-500" />
+                <span>info.DevanshCyberSec@gmail.com</span>
+              </div>
+              <div className="flex items-center space-x-3 text-sm text-muted-foreground">
+                <Phone className="h-4 w-4 text-cyber-500" />
+                <span>+91 9321111544</span>
+              </div>
+              <div className="flex items-center space-x-3 text-sm text-muted-foreground">
+                <MapPin className="h-4 w-4 text-cyber-500" />
+                <span>Borivali, Mumbai, Maharashtra, India</span>
+              </div>
+            </div>
           </div>
 
           {/* Footer Links */}

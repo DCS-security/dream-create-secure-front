@@ -1,5 +1,5 @@
 
-import { Shield, Brain, Code, Zap, Lock, Users } from 'lucide-react';
+import { CheckCircle, Shield, Brain, Code, Zap, Lock, Users } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 const Features = () => {
@@ -8,37 +8,73 @@ const Features = () => {
       icon: Shield,
       title: 'Advanced Threat Protection',
       description: 'AI-powered threat detection and prevention systems that adapt to emerging cybersecurity challenges in real-time.',
-      color: 'cyber-500'
+      features: [
+        'Real-time threat monitoring',
+        'Advanced malware detection',
+        'Automated incident response',
+        'Security analytics dashboard'
+      ],
+      highlighted: false
     },
     {
       icon: Brain,
       title: 'Machine Learning Integration',
       description: 'Sophisticated ML algorithms that learn from patterns and behaviors to predict and prevent security breaches.',
-      color: 'cyber-400'
+      features: [
+        'Behavioral pattern analysis',
+        'Predictive threat modeling',
+        'Intelligent anomaly detection',
+        'Automated learning systems'
+      ],
+      highlighted: true
     },
     {
       icon: Code,
       title: 'Secure Development',
       description: 'Tools and frameworks that embed security into every stage of the software development lifecycle.',
-      color: 'cyber-300'
+      features: [
+        'Security code analysis',
+        'Vulnerability scanning',
+        'Secure coding guidelines',
+        'DevSecOps integration'
+      ],
+      highlighted: false
     },
     {
       icon: Zap,
       title: 'Real-time Monitoring',
       description: 'Continuous surveillance and instant response capabilities to neutralize threats before they can cause damage.',
-      color: 'cyber-600'
+      features: [
+        '24/7 system monitoring',
+        'Instant alert systems',
+        'Performance optimization',
+        'Threat intelligence feeds'
+      ],
+      highlighted: false
     },
     {
       icon: Lock,
       title: 'Zero-Trust Architecture',
       description: 'Comprehensive security models that verify every user and device, regardless of their location or credentials.',
-      color: 'cyber-500'
+      features: [
+        'Identity verification',
+        'Device authentication',
+        'Network segmentation',
+        'Access control policies'
+      ],
+      highlighted: false
     },
     {
       icon: Users,
       title: 'Expert Consultation',
       description: 'Access to our team of cybersecurity experts who provide strategic guidance and implementation support.',
-      color: 'cyber-400'
+      features: [
+        'Security strategy consulting',
+        'Implementation guidance',
+        'Training and support',
+        'Ongoing maintenance'
+      ],
+      highlighted: false
     },
   ];
 
@@ -60,22 +96,45 @@ const Features = () => {
             const IconComponent = feature.icon;
             return (
               <Card 
-                key={feature.title} 
-                className="group hover:shadow-xl transition-all duration-300 border-border/50 hover:border-cyber-400/50 bg-card/50 backdrop-blur-sm animate-fade-in"
+                key={feature.title}
+                className={`group transition-all duration-300 ${
+                  feature.highlighted 
+                    ? 'border-cyber-400/50 shadow-xl scale-105 bg-cyber-500/5' 
+                    : 'border-border/50 hover:border-cyber-400/30 bg-card/50'
+                } backdrop-blur-sm animate-fade-in`}
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <CardHeader>
-                  <div className={`p-3 rounded-lg bg-${feature.color}/10 border border-${feature.color}/20 w-fit mb-4 group-hover:bg-${feature.color}/20 transition-colors`}>
-                    <IconComponent className={`h-6 w-6 text-${feature.color}`} />
+                {feature.highlighted && (
+                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                    <span className="bg-cyber-500 text-white px-4 py-1 rounded-full text-sm font-medium">
+                      Featured
+                    </span>
                   </div>
-                  <CardTitle className="text-xl font-semibold group-hover:text-cyber-400 transition-colors">
+                )}
+                
+                <CardHeader>
+                  <div className="flex justify-center mb-4">
+                    <div className={`p-3 rounded-lg ${feature.highlighted ? 'bg-cyber-500/20' : 'bg-cyber-500/10'}`}>
+                      <IconComponent className={`h-8 w-8 ${feature.highlighted ? 'text-cyber-400' : 'text-cyber-500'}`} />
+                    </div>
+                  </div>
+                  <CardTitle className={`text-xl font-semibold text-center ${feature.highlighted ? 'text-cyber-400' : ''}`}>
                     {feature.title}
                   </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-base leading-relaxed">
+                  <CardDescription className="text-base text-center">
                     {feature.description}
                   </CardDescription>
+                </CardHeader>
+                
+                <CardContent className="space-y-4">
+                  <ul className="space-y-3">
+                    {feature.features.map((item) => (
+                      <li key={item} className="flex items-center space-x-3">
+                        <CheckCircle className={`h-5 w-5 ${feature.highlighted ? 'text-cyber-400' : 'text-cyber-500'}`} />
+                        <span className="text-sm">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </CardContent>
               </Card>
             );

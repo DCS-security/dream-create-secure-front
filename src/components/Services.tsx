@@ -1,6 +1,5 @@
 
-import { CheckCircle, ArrowRight, Shield, Brain, Code } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { CheckCircle, Shield, Brain, Code } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 const Services = () => {
@@ -114,18 +113,6 @@ const Services = () => {
                       </li>
                     ))}
                   </ul>
-                  
-                  <Button 
-                    className={`w-full group ${
-                      service.highlighted 
-                        ? 'bg-cyber-500 hover:bg-cyber-600 text-white' 
-                        : 'bg-muted hover:bg-cyber-500/10 text-foreground hover:text-cyber-400 border border-border hover:border-cyber-400/50'
-                    }`}
-                    variant={service.highlighted ? 'default' : 'outline'}
-                  >
-                    Get Started
-                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                  </Button>
                 </CardContent>
               </Card>
             );

@@ -1,10 +1,20 @@
 
 import { useState } from 'react';
-import { Menu, X, Shield } from 'lucide-react';
+import { Menu, X, Shield, Sun, Moon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDark, setIsDark] = useState(false);
+
+  const toggleTheme = () => {
+    setIsDark(!isDark);
+    if (!isDark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  };
 
   const navItems = [
     { label: 'Home', href: '#home' },
@@ -15,7 +25,7 @@ const Navigation = () => {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/20">
+    <nav className="bg-background/80 backdrop-blur-md border-b border-border/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -43,22 +53,27 @@ const Navigation = () => {
             </div>
           </div>
 
-          {/* CTA Button */}
-          <div className="hidden md:block flex-shrink-0">
-            <Button className="bg-cyber-500 hover:bg-cyber-600 text-white">
-              Get Started
-            </Button>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="md:hidden">
+          {/* Theme Toggle */}
+          <div className="flex items-center space-x-4 flex-shrink-0">
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              onClick={toggleTheme}
+              className="hidden md:flex"
             >
-              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </Button>
+
+            {/* Mobile Menu Button */}
+            <div className="md:hidden">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+              >
+                {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -77,8 +92,13 @@ const Navigation = () => {
                 {item.label}
               </a>
             ))}
-            <Button className="w-full bg-cyber-500 hover:bg-cyber-600 text-white mt-4">
-              Get Started
+            <Button
+              variant="ghost"
+              onClick={toggleTheme}
+              className="w-full flex items-center justify-center space-x-2"
+            >
+              {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+              <span>{isDark ? 'Light Mode' : 'Dark Mode'}</span>
             </Button>
           </div>
         </div>
