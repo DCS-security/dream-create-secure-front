@@ -13,7 +13,7 @@ const Contact = () => {
     {
       icon: Phone,
       title: 'Phone',
-      value: '+91 9321111544',
+      value: '+91 9082678303',
       description: '24/7 support hotline'
     },
     {

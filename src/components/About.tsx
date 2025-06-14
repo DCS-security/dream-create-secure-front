@@ -1,12 +1,12 @@
 
-import { Target, Users, Lightbulb, Award } from 'lucide-react';
+import { Target, Users, Lightbulb, Award, ShieldCheck, Server, Clock } from 'lucide-react';
 
 const About = () => {
   const stats = [
-    { number: '50+', label: 'Security Experts' },
-    { number: '1000+', label: 'Threats Prevented' },
-    { number: '99.9%', label: 'Uptime Guarantee' },
-    { number: '24/7', label: 'Support Available' }
+    { icon: Users, label: 'Elite Expertise' },
+    { icon: ShieldCheck, label: 'Proactive Defense' },
+    { icon: Server, label: 'Reliable Service' },
+    { icon: Clock, label: 'Always-On Support' }
   ];
 
   const values = [
@@ -48,20 +48,21 @@ const About = () => {
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-20">
-          {stats.map((stat, index) => (
-            <div 
-              key={stat.label} 
-              className="text-center animate-fade-in"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <div className="text-4xl md:text-5xl font-bold text-cyber-400 mb-2">
-                {stat.number}
+          {stats.map((stat, index) => {
+            const IconComponent = stat.icon;
+            return (
+              <div 
+                key={stat.label} 
+                className="text-center animate-fade-in"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <IconComponent className="h-10 w-10 md:h-12 md:w-12 text-cyber-400 mx-auto mb-4" />
+                <div className="text-md md:text-lg font-semibold text-foreground">
+                  {stat.label}
+                </div>
               </div>
-              <div className="text-muted-foreground">
-                {stat.label}
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Values */}

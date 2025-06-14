@@ -10,21 +10,10 @@ const Footer = () => {
     ],
     Company: [
       'About Us',
-      'Our Team',
-      'Careers',
-      'Press'
-    ],
-    Resources: [
-      'Documentation',
-      'Blog',
-      'Case Studies',
-      'Whitepapers'
+      'Our Team'
     ],
     Support: [
-      'Help Center',
-      'Contact Us',
-      'Status',
-      'Training'
+      'Contact Us'
     ]
   };
 
@@ -53,7 +42,7 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-3 text-sm text-muted-foreground">
                 <Phone className="h-4 w-4 text-cyber-500" />
-                <span>+91 9321111544</span>
+                <span>+91 9082678303</span>
               </div>
               <div className="flex items-center space-x-3 text-sm text-muted-foreground">
                 <MapPin className="h-4 w-4 text-cyber-500" />
