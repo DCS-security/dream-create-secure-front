@@ -7,7 +7,7 @@ const Contact = () => {
     {
       icon: Mail,
       title: 'Email',
-      value: 'info.DevanshCyberSec@gmail.com',
+      value: 'info@devanshcybersec.in',
       description: 'Send us an email anytime'
     },
     {

@@ -1,4 +1,3 @@
-
 import { Shield, Mail, Phone, MapPin } from 'lucide-react';
 
 const Footer = () => {
@@ -50,7 +49,7 @@ const Footer = () => {
             <div className="space-y-3">
               <div className="flex items-center space-x-3 text-sm text-muted-foreground">
                 <Mail className="h-4 w-4 text-cyber-500" />
-                <span>info.DevanshCyberSec@gmail.com</span>
+                <span>info@devanshcybersec.in</span>
               </div>
               <div className="flex items-center space-x-3 text-sm text-muted-foreground">
                 <Phone className="h-4 w-4 text-cyber-500" />
