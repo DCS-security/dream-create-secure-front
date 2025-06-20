@@ -27,7 +27,7 @@ const Footer = () => {
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-2 mb-6">
               <img 
-                src="/lovable-uploads/6f367979-edd2-4846-a3d6-34ccfdfc6b70.png" 
+                src="/lovable-uploads/7568cbcf-4c07-4726-8aa4-67b0c06a3670.png" 
                 alt="DCS Logo" 
                 className="h-6 w-6"
               />
@@ -64,21 +64,12 @@ const Footer = () => {
               <ul className="space-y-3">
                 {links.map((link) => (
                   <li key={link}>
-                    {link === 'About Us' ? (
-                      <Link
-                        to="/about-us"
-                        className="text-sm text-muted-foreground hover:text-cyber-400 transition-colors"
-                      >
-                        {link}
-                      </Link>
-                    ) : (
-                      <a
-                        href="#"
-                        className="text-sm text-muted-foreground hover:text-cyber-400 transition-colors"
-                      >
-                        {link}
-                      </a>
-                    )}
+                    <a
+                      href="#"
+                      className="text-sm text-muted-foreground hover:text-cyber-400 transition-colors"
+                    >
+                      {link}
+                    </a>
                   </li>
                 ))}
               </ul>

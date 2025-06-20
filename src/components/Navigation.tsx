@@ -2,11 +2,12 @@
 import { useState } from 'react';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDark, setIsDark] = useState(false);
+  const location = useLocation();
 
   const toggleTheme = () => {
     setIsDark(!isDark);
@@ -18,14 +19,21 @@ const Navigation = () => {
   };
 
   const navItems = [
-    { label: 'Home', href: '#home' },
-    { label: 'Solutions', href: '#solutions' },
-    { label: 'Services', href: '#services' },
-    { label: 'About', href: '#about' },
+    { label: 'Home', href: '#home', route: '/' },
+    { label: 'Solutions', href: '#solutions', route: '/' },
+    { label: 'Services', href: '#services', route: '/' },
+    { label: 'Contact', href: '#contact', route: '/' },
     { label: 'About Us', href: '/about-us' },
     { label: 'Blog', href: '/blog' },
-    { label: 'Contact', href: '#contact' },
   ];
+
+  const handleNavClick = (item: any) => {
+    if (item.href.startsWith('#') && location.pathname !== '/') {
+      // If we're not on home page and clicking an anchor link, go to home first
+      window.location.href = `/${item.href}`;
+    }
+    setIsMenuOpen(false);
+  };
 
   return (
     <nav className="bg-background/80 backdrop-blur-md border-b border-border/20">
@@ -48,13 +56,23 @@ const Navigation = () => {
             <div className="flex items-center space-x-8">
               {navItems.map((item) => (
                 item.href.startsWith('#') ? (
-                  <a
-                    key={item.label}
-                    href={item.href}
-                    className="text-muted-foreground hover:text-cyber-400 transition-colors duration-200"
-                  >
-                    {item.label}
-                  </a>
+                  location.pathname === '/' ? (
+                    <a
+                      key={item.label}
+                      href={item.href}
+                      className="text-muted-foreground hover:text-cyber-400 transition-colors duration-200"
+                    >
+                      {item.label}
+                    </a>
+                  ) : (
+                    <Link
+                      key={item.label}
+                      to={`/${item.href}`}
+                      className="text-muted-foreground hover:text-cyber-400 transition-colors duration-200"
+                    >
+                      {item.label}
+                    </Link>
+                  )
                 ) : (
                   <Link
                     key={item.label}
@@ -99,20 +117,31 @@ const Navigation = () => {
           <div className="px-4 py-6 space-y-4">
             {navItems.map((item) => (
               item.href.startsWith('#') ? (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  className="block text-muted-foreground hover:text-cyber-400 transition-colors duration-200"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {item.label}
-                </a>
+                location.pathname === '/' ? (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    className="block text-muted-foreground hover:text-cyber-400 transition-colors duration-200"
+                    onClick={() => handleNavClick(item)}
+                  >
+                    {item.label}
+                  </a>
+                ) : (
+                  <Link
+                    key={item.label}
+                    to={`/${item.href}`}
+                    className="block text-muted-foreground hover:text-cyber-400 transition-colors duration-200"
+                    onClick={() => handleNavClick(item)}
+                  >
+                    {item.label}
+                  </Link>
+                )
               ) : (
                 <Link
                   key={item.label}
                   to={item.href}
                   className="block text-muted-foreground hover:text-cyber-400 transition-colors duration-200"
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={() => handleNavClick(item)}
                 >
                   {item.label}
                 </Link>
