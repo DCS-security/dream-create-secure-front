@@ -13,10 +13,17 @@ const Hero = () => {
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div className="animate-fade-in">
-          {/* Company Name */}
-          <h1 className="text-6xl md:text-8xl font-bold mb-6 bg-gradient-to-r from-cyber-400 via-cyber-300 to-cyber-500 bg-clip-text text-transparent">
-            DCS
-          </h1>
+          {/* Company Logo and Name */}
+          <div className="flex items-center justify-center space-x-4 mb-6">
+            <img 
+              src="/lovable-uploads/6f367979-edd2-4846-a3d6-34ccfdfc6b70.png" 
+              alt="DCS Logo" 
+              className="h-16 w-16 md:h-20 md:w-20"
+            />
+            <h1 className="text-6xl md:text-8xl font-bold bg-gradient-to-r from-cyber-400 via-cyber-300 to-cyber-500 bg-clip-text text-transparent">
+              DCS
+            </h1>
+          </div>
           
           {/* Tagline */}
           <div className="text-2xl md:text-4xl font-light mb-8 text-foreground/90">

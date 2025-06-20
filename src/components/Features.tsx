@@ -6,13 +6,13 @@ const Features = () => {
   const features = [
     {
       icon: Shield,
-      title: 'Advanced Threat Protection',
-      description: 'AI-powered threat detection and prevention systems that adapt to emerging cybersecurity challenges in real-time.',
+      title: 'Auditors Dashboard',
+      description: 'Comprehensive security auditing platform with real-time insights and detailed reporting capabilities.',
       features: [
-        'Real-time threat monitoring',
-        'Advanced malware detection',
-        'Automated incident response',
-        'Security analytics dashboard'
+        'Real-time security monitoring',
+        'Compliance tracking dashboard',
+        'Automated audit reports',
+        'Risk assessment analytics'
       ],
       highlighted: false
     },
@@ -42,13 +42,13 @@ const Features = () => {
     },
     {
       icon: Zap,
-      title: 'Real-time Monitoring',
-      description: 'Continuous surveillance and instant response capabilities to neutralize threats before they can cause damage.',
+      title: 'Mail Security Solution',
+      description: 'Advanced email protection system that safeguards against phishing, malware, and other email-based threats.',
       features: [
-        '24/7 system monitoring',
-        'Instant alert systems',
-        'Performance optimization',
-        'Threat intelligence feeds'
+        'Email threat detection',
+        'Phishing protection',
+        'Malware scanning',
+        'Safe link verification'
       ],
       highlighted: false
     },

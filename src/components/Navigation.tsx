@@ -1,7 +1,8 @@
 
 import { useState } from 'react';
-import { Menu, X, Shield, Sun, Moon } from 'lucide-react';
+import { Menu, X, Sun, Moon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -21,6 +22,8 @@ const Navigation = () => {
     { label: 'Solutions', href: '#solutions' },
     { label: 'Services', href: '#services' },
     { label: 'About', href: '#about' },
+    { label: 'About Us', href: '/about-us' },
+    { label: 'Blog', href: '/blog' },
     { label: 'Contact', href: '#contact' },
   ];
 
@@ -29,26 +32,38 @@ const Navigation = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <div className="flex items-center space-x-2 flex-shrink-0">
-            <div className="p-2 bg-cyber-500/10 rounded-lg">
-              <Shield className="h-6 w-6 text-cyber-500" />
-            </div>
+          <Link to="/" className="flex items-center space-x-2 flex-shrink-0">
+            <img 
+              src="/lovable-uploads/6f367979-edd2-4846-a3d6-34ccfdfc6b70.png" 
+              alt="DCS Logo" 
+              className="h-8 w-8"
+            />
             <span className="text-xl font-bold bg-gradient-to-r from-cyber-400 to-cyber-500 bg-clip-text text-transparent">
               DCS
             </span>
-          </div>
+          </Link>
 
           {/* Desktop Navigation - Centered */}
           <div className="hidden md:flex items-center justify-center flex-1">
             <div className="flex items-center space-x-8">
               {navItems.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  className="text-muted-foreground hover:text-cyber-400 transition-colors duration-200"
-                >
-                  {item.label}
-                </a>
+                item.href.startsWith('#') ? (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    className="text-muted-foreground hover:text-cyber-400 transition-colors duration-200"
+                  >
+                    {item.label}
+                  </a>
+                ) : (
+                  <Link
+                    key={item.label}
+                    to={item.href}
+                    className="text-muted-foreground hover:text-cyber-400 transition-colors duration-200"
+                  >
+                    {item.label}
+                  </Link>
+                )
               ))}
             </div>
           </div>
@@ -83,14 +98,25 @@ const Navigation = () => {
         <div className="md:hidden bg-background/95 backdrop-blur-md border-b border-border/20">
           <div className="px-4 py-6 space-y-4">
             {navItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                className="block text-muted-foreground hover:text-cyber-400 transition-colors duration-200"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {item.label}
-              </a>
+              item.href.startsWith('#') ? (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  className="block text-muted-foreground hover:text-cyber-400 transition-colors duration-200"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {item.label}
+                </a>
+              ) : (
+                <Link
+                  key={item.label}
+                  to={item.href}
+                  className="block text-muted-foreground hover:text-cyber-400 transition-colors duration-200"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              )
             ))}
             <Button
               variant="ghost"

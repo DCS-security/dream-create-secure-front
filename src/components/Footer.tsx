@@ -1,4 +1,6 @@
+
 import { Shield, Mail, Phone, MapPin } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   const footerLinks = {
@@ -24,9 +26,11 @@ const Footer = () => {
           {/* Company Info */}
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-2 mb-6">
-              <div className="p-2 bg-cyber-500/10 rounded-lg">
-                <Shield className="h-6 w-6 text-cyber-500" />
-              </div>
+              <img 
+                src="/lovable-uploads/6f367979-edd2-4846-a3d6-34ccfdfc6b70.png" 
+                alt="DCS Logo" 
+                className="h-6 w-6"
+              />
               <span className="text-2xl font-bold bg-gradient-to-r from-cyber-400 to-cyber-500 bg-clip-text text-transparent">
                 DCS
               </span>
@@ -60,17 +64,43 @@ const Footer = () => {
               <ul className="space-y-3">
                 {links.map((link) => (
                   <li key={link}>
-                    <a
-                      href="#"
-                      className="text-sm text-muted-foreground hover:text-cyber-400 transition-colors"
-                    >
-                      {link}
-                    </a>
+                    {link === 'About Us' ? (
+                      <Link
+                        to="/about-us"
+                        className="text-sm text-muted-foreground hover:text-cyber-400 transition-colors"
+                      >
+                        {link}
+                      </Link>
+                    ) : (
+                      <a
+                        href="#"
+                        className="text-sm text-muted-foreground hover:text-cyber-400 transition-colors"
+                      >
+                        {link}
+                      </a>
+                    )}
                   </li>
                 ))}
               </ul>
             </div>
           ))}
+
+          {/* Additional Links */}
+          <div>
+            <h3 className="text-sm font-semibold text-foreground mb-4">
+              Resources
+            </h3>
+            <ul className="space-y-3">
+              <li>
+                <Link
+                  to="/blog"
+                  className="text-sm text-muted-foreground hover:text-cyber-400 transition-colors"
+                >
+                  Blog
+                </Link>
+              </li>
+            </ul>
+          </div>
         </div>
 
         <div className="border-t border-border/50 mt-12 pt-8">
