@@ -11,10 +11,12 @@ import { useToast } from '@/hooks/use-toast';
 const Admin = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [credentials, setCredentials] = useState({ username: '', password: '' });
-  const [selectedSection, setSelectedSection] = useState('');
   const { toast } = useToast();
 
-  const handleLogin = () => {
+  const handleLogin = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    console.log('Login attempt:', credentials);
+    
     if (credentials.username === 'admin' && credentials.password === 'Hit@1703') {
       setIsAuthenticated(true);
       toast({
@@ -23,10 +25,16 @@ const Admin = () => {
       });
     } else {
       toast({
-        title: "Login Failed",
+        title: "Login Failed", 
         description: "Invalid credentials. Please try again.",
         variant: "destructive",
       });
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleLogin();
     }
   };
 
@@ -73,31 +81,35 @@ const Admin = () => {
               Enter your admin credentials to continue
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <Input
-                type="text"
-                placeholder="Username"
-                value={credentials.username}
-                onChange={(e) => setCredentials({...credentials, username: e.target.value})}
-                className="border-border/50 bg-card/50"
-              />
-            </div>
-            <div>
-              <Input
-                type="password"
-                placeholder="Password"
-                value={credentials.password}
-                onChange={(e) => setCredentials({...credentials, password: e.target.value})}
-                className="border-border/50 bg-card/50"
-              />
-            </div>
-            <Button 
-              onClick={handleLogin}
-              className="w-full bg-cyber-500 hover:bg-cyber-600 text-white"
-            >
-              Login
-            </Button>
+          <CardContent>
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div>
+                <Input
+                  type="text"
+                  placeholder="Username"
+                  value={credentials.username}
+                  onChange={(e) => setCredentials({...credentials, username: e.target.value})}
+                  onKeyPress={handleKeyPress}
+                  className="border-border/50 bg-card/50"
+                />
+              </div>
+              <div>
+                <Input
+                  type="password"
+                  placeholder="Password"
+                  value={credentials.password}
+                  onChange={(e) => setCredentials({...credentials, password: e.target.value})}
+                  onKeyPress={handleKeyPress}
+                  className="border-border/50 bg-card/50"
+                />
+              </div>
+              <Button 
+                type="submit"
+                className="w-full bg-cyber-500 hover:bg-cyber-600 text-white"
+              >
+                Login
+              </Button>
+            </form>
           </CardContent>
         </Card>
       </div>
