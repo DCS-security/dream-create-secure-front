@@ -16,7 +16,7 @@ const Hero = () => {
           {/* Company Logo and Name */}
           <div className="flex items-center justify-center space-x-4 mb-6">
             <img 
-              src="/lovable-uploads/6f367979-edd2-4846-a3d6-34ccfdfc6b70.png" 
+              src="/lovable-uploads/7568cbcf-4c07-4726-8aa4-67b0c06a3670.png" 
               alt="DCS Logo" 
               className="h-16 w-16 md:h-20 md:w-20"
             />
