@@ -11,7 +11,6 @@ const Footer = () => {
       'Secure Development'
     ],
     Company: [
-      'About Us',
       'Our Team'
     ],
     Support: [

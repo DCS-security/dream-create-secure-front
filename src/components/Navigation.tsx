@@ -2,12 +2,13 @@
 import { useState } from 'react';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDark, setIsDark] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const toggleTheme = () => {
     setIsDark(!isDark);
@@ -19,17 +20,26 @@ const Navigation = () => {
   };
 
   const navItems = [
-    { label: 'Home', href: '/' },
-    { label: 'Solutions', href: '/#solutions' },
-    { label: 'Services', href: '/#services' },
-    { label: 'Contact', href: '/#contact' },
-    { label: 'Blog', href: '/blog' },
+    { label: 'Home', href: '/', type: 'route' },
+    { label: 'Solutions', href: '#solutions', type: 'anchor' },
+    { label: 'Services', href: '#services', type: 'anchor' },
+    { label: 'Contact', href: '#contact', type: 'anchor' },
+    { label: 'About Us', href: '/about-us', type: 'route' },
+    { label: 'Blog', href: '/blog', type: 'route' },
   ];
 
   const handleNavClick = (item: any) => {
-    if (item.href.includes('#') && location.pathname !== '/') {
-      // If we're not on home page and clicking an anchor link, navigate to home with hash
-      window.location.href = item.href;
+    if (item.type === 'anchor') {
+      if (location.pathname === '/') {
+        // If we're on home page, just scroll to anchor
+        const element = document.querySelector(item.href);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      } else {
+        // If we're not on home page, navigate to home with hash
+        navigate(`/${item.href}`);
+      }
     }
     setIsMenuOpen(false);
   };
@@ -54,24 +64,27 @@ const Navigation = () => {
           <div className="hidden md:flex items-center justify-center flex-1">
             <div className="flex items-center space-x-8">
               {navItems.map((item) => (
-                item.href.includes('#') ? (
+                item.type === 'anchor' ? (
                   location.pathname === '/' ? (
                     <a
                       key={item.label}
                       href={item.href}
-                      className="text-muted-foreground hover:text-cyber-400 transition-colors duration-200"
+                      className="text-muted-foreground hover:text-cyber-400 transition-colors duration-200 cursor-pointer"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleNavClick(item);
+                      }}
                     >
                       {item.label}
                     </a>
                   ) : (
-                    <a
+                    <button
                       key={item.label}
-                      href={item.href}
-                      className="text-muted-foreground hover:text-cyber-400 transition-colors duration-200"
+                      className="text-muted-foreground hover:text-cyber-400 transition-colors duration-200 cursor-pointer"
                       onClick={() => handleNavClick(item)}
                     >
                       {item.label}
-                    </a>
+                    </button>
                   )
                 ) : (
                   <Link
@@ -116,25 +129,27 @@ const Navigation = () => {
         <div className="md:hidden bg-background/95 backdrop-blur-md border-b border-border/20">
           <div className="px-4 py-6 space-y-4">
             {navItems.map((item) => (
-              item.href.includes('#') ? (
+              item.type === 'anchor' ? (
                 location.pathname === '/' ? (
                   <a
                     key={item.label}
                     href={item.href}
-                    className="block text-muted-foreground hover:text-cyber-400 transition-colors duration-200"
-                    onClick={() => handleNavClick(item)}
+                    className="block text-muted-foreground hover:text-cyber-400 transition-colors duration-200 cursor-pointer"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleNavClick(item);
+                    }}
                   >
                     {item.label}
                   </a>
                 ) : (
-                  <a
+                  <button
                     key={item.label}
-                    href={item.href}
-                    className="block text-muted-foreground hover:text-cyber-400 transition-colors duration-200"
+                    className="block text-left w-full text-muted-foreground hover:text-cyber-400 transition-colors duration-200 cursor-pointer"
                     onClick={() => handleNavClick(item)}
                   >
                     {item.label}
-                  </a>
+                  </button>
                 )
               ) : (
                 <Link
