@@ -1,17 +1,23 @@
-
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Shield, Edit, Plus, Trash2, Eye, Settings } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useBlogStorage } from '@/hooks/useBlogStorage';
+import BlogPostDialog from '@/components/BlogPostDialog';
+import ContentEditDialog from '@/components/ContentEditDialog';
 
 const Admin = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [credentials, setCredentials] = useState({ username: '', password: '' });
+  const [blogDialogOpen, setBlogDialogOpen] = useState(false);
+  const [editingPost, setEditingPost] = useState<any>(null);
+  const [contentDialogOpen, setContentDialogOpen] = useState(false);
+  const [editingSection, setEditingSection] = useState('');
   const { toast } = useToast();
+  const { posts, addPost, updatePost, deletePost } = useBlogStorage();
 
   const handleLogin = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -38,29 +44,34 @@ const Admin = () => {
     }
   };
 
-  const [blogForm, setBlogForm] = useState({
-    title: '',
-    excerpt: '',
-    content: '',
-    author: '',
-    category: '',
-    chapter: ''
-  });
-
-  const handleBlogSubmit = () => {
-    // This would integrate with a backend in a real application
+  const handleBlogCreate = (postData: any) => {
+    addPost(postData);
     toast({
       title: "Blog Post Created",
       description: "Your blog post has been published successfully!",
     });
-    setBlogForm({
-      title: '',
-      excerpt: '',
-      content: '',
-      author: '',
-      category: '',
-      chapter: ''
+  };
+
+  const handleBlogUpdate = (id: string, postData: any) => {
+    updatePost(id, postData);
+    toast({
+      title: "Blog Post Updated",
+      description: "Your blog post has been updated successfully!",
     });
+    setEditingPost(null);
+  };
+
+  const handleBlogDelete = (id: string) => {
+    deletePost(id);
+    toast({
+      title: "Blog Post Deleted",
+      description: "The blog post has been deleted successfully!",
+    });
+  };
+
+  const handleEditContent = (sectionTitle: string) => {
+    setEditingSection(sectionTitle);
+    setContentDialogOpen(true);
   };
 
   if (!isAuthenticated) {
@@ -154,7 +165,7 @@ const Admin = () => {
                 { title: 'Contact Info', description: 'Update contact details' },
                 { title: 'Footer', description: 'Manage footer content' }
               ].map((section) => (
-                <Card key={section.title} className="group hover:border-cyber-400/30 transition-colors cursor-pointer">
+                <Card key={section.title} className="group hover:border-cyber-400/30 transition-colors">
                   <CardHeader>
                     <CardTitle className="flex items-center justify-between">
                       {section.title}
@@ -163,7 +174,11 @@ const Admin = () => {
                     <CardDescription>{section.description}</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <Button variant="outline" className="w-full">
+                    <Button 
+                      variant="outline" 
+                      className="w-full"
+                      onClick={() => handleEditContent(section.title)}
+                    >
                       <Eye className="h-4 w-4 mr-2" />
                       Edit Content
                     </Button>
@@ -177,99 +192,57 @@ const Admin = () => {
             <div className="space-y-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Create New Blog Post</CardTitle>
+                  <CardTitle className="flex items-center justify-between">
+                    Blog Management
+                    <Button 
+                      onClick={() => setBlogDialogOpen(true)}
+                      className="bg-cyber-500 hover:bg-cyber-600"
+                    >
+                      <Plus className="h-4 w-4 mr-2" />
+                      New Post
+                    </Button>
+                  </CardTitle>
                   <CardDescription>
-                    Add a new chapter to your blog series
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-sm font-medium mb-2 block">Title</label>
-                      <Input
-                        placeholder="Blog post title"
-                        value={blogForm.title}
-                        onChange={(e) => setBlogForm({...blogForm, title: e.target.value})}
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium mb-2 block">Chapter Number</label>
-                      <Input
-                        type="number"
-                        placeholder="1"
-                        value={blogForm.chapter}
-                        onChange={(e) => setBlogForm({...blogForm, chapter: e.target.value})}
-                      />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-sm font-medium mb-2 block">Author</label>
-                      <Input
-                        placeholder="Author name"
-                        value={blogForm.author}
-                        onChange={(e) => setBlogForm({...blogForm, author: e.target.value})}
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium mb-2 block">Category</label>
-                      <Input
-                        placeholder="AI Security, ML Security, etc."
-                        value={blogForm.category}
-                        onChange={(e) => setBlogForm({...blogForm, category: e.target.value})}
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium mb-2 block">Excerpt</label>
-                    <Textarea
-                      placeholder="Brief description of the blog post"
-                      value={blogForm.excerpt}
-                      onChange={(e) => setBlogForm({...blogForm, excerpt: e.target.value})}
-                      rows={3}
-                    />
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium mb-2 block">Content</label>
-                    <Textarea
-                      placeholder="Full blog post content"
-                      value={blogForm.content}
-                      onChange={(e) => setBlogForm({...blogForm, content: e.target.value})}
-                      rows={10}
-                    />
-                  </div>
-                  <Button onClick={handleBlogSubmit} className="bg-cyber-500 hover:bg-cyber-600">
-                    <Plus className="h-4 w-4 mr-2" />
-                    Publish Post
-                  </Button>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Existing Blog Posts</CardTitle>
-                  <CardDescription>
-                    Manage your published blog posts
+                    Manage your blog posts
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {[1, 2, 3].map((post) => (
-                      <div key={post} className="flex items-center justify-between p-4 border border-border/50 rounded-lg">
-                        <div>
-                          <h4 className="font-semibold">Sample Blog Post {post}</h4>
-                          <p className="text-sm text-muted-foreground">Chapter {post} • Published</p>
+                    {posts.map((post) => (
+                      <div key={post.id} className="flex items-center justify-between p-4 border border-border/50 rounded-lg">
+                        <div className="flex-1">
+                          <h4 className="font-semibold">{post.title}</h4>
+                          <p className="text-sm text-muted-foreground">
+                            Chapter {post.chapter} • {post.category} • {new Date(post.date).toLocaleDateString()}
+                          </p>
+                          <p className="text-sm text-muted-foreground mt-1">{post.excerpt}</p>
                         </div>
                         <div className="flex space-x-2">
-                          <Button variant="outline" size="sm">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => {
+                              setEditingPost(post);
+                              setBlogDialogOpen(true);
+                            }}
+                          >
                             <Edit className="h-4 w-4" />
                           </Button>
-                          <Button variant="outline" size="sm">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => handleBlogDelete(post.id)}
+                          >
                             <Trash2 className="h-4 w-4" />
                           </Button>
                         </div>
                       </div>
                     ))}
+                    {posts.length === 0 && (
+                      <div className="text-center py-8 text-muted-foreground">
+                        No blog posts yet. Create your first post!
+                      </div>
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -277,6 +250,7 @@ const Admin = () => {
           </TabsContent>
 
           <TabsContent value="settings">
+            
             <Card>
               <CardHeader>
                 <CardTitle>Website Settings</CardTitle>
@@ -291,10 +265,7 @@ const Admin = () => {
                 </div>
                 <div>
                   <label className="text-sm font-medium mb-2 block">Site Description</label>
-                  <Textarea 
-                    defaultValue="AI-Powered Cybersecurity Solutions"
-                    rows={3}
-                  />
+                  <Input defaultValue="AI-Powered Cybersecurity Solutions" />
                 </div>
                 <div>
                   <label className="text-sm font-medium mb-2 block">Contact Email</label>
@@ -311,6 +282,24 @@ const Admin = () => {
             </Card>
           </TabsContent>
         </Tabs>
+
+        <BlogPostDialog
+          isOpen={blogDialogOpen}
+          onClose={() => {
+            setBlogDialogOpen(false);
+            setEditingPost(null);
+          }}
+          onSave={handleBlogCreate}
+          onUpdate={handleBlogUpdate}
+          post={editingPost}
+          mode={editingPost ? 'edit' : 'create'}
+        />
+
+        <ContentEditDialog
+          isOpen={contentDialogOpen}
+          onClose={() => setContentDialogOpen(false)}
+          sectionTitle={editingSection}
+        />
       </div>
     </div>
   );

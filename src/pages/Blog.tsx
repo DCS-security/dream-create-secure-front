@@ -6,42 +6,13 @@ import { Search, Calendar, User, ArrowRight } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { useBlogStorage } from '@/hooks/useBlogStorage';
 
 const Blog = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const { posts } = useBlogStorage();
 
-  // Sample blog posts - this will be managed via admin panel
-  const blogPosts = [
-    {
-      id: 1,
-      title: 'The Future of AI in Cybersecurity - Chapter 1: Introduction',
-      excerpt: 'Exploring how artificial intelligence is revolutionizing the cybersecurity landscape and what it means for businesses.',
-      author: 'Deep Gada',
-      date: '2024-01-15',
-      category: 'AI Security',
-      chapter: 1
-    },
-    {
-      id: 2,
-      title: 'Machine Learning Threat Detection - Chapter 2: Advanced Algorithms',
-      excerpt: 'Deep dive into machine learning algorithms that can identify and prevent sophisticated cyber threats.',
-      author: 'Hitansh Shah',
-      date: '2024-01-10',
-      category: 'ML Security',
-      chapter: 2
-    },
-    {
-      id: 3,
-      title: 'Zero Trust Architecture - Chapter 3: Implementation Guide',
-      excerpt: 'A comprehensive guide to implementing zero trust security architecture in modern organizations.',
-      author: 'DCS Team',
-      date: '2024-01-05',
-      category: 'Security Architecture',
-      chapter: 3
-    }
-  ];
-
-  const filteredPosts = blogPosts.filter(post =>
+  const filteredPosts = posts.filter(post =>
     post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     post.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
     post.category.toLowerCase().includes(searchTerm.toLowerCase())
