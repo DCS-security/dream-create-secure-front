@@ -1,7 +1,10 @@
+
 {
   "rewrites": [
     { "source": "/admin", "destination": "/index.html" },
-    { "source": "/admin/**", "destination": "/index.html" },
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/admin/(.*)", "destination": "/index.html" },
+    { "source": "/blog", "destination": "/index.html" },
+    { "source": "/about-us", "destination": "/index.html" },
+    { "source": "/((?!api|_next|_static|favicon.ico|lovable-uploads).*)", "destination": "/index.html" }
   ]
 }

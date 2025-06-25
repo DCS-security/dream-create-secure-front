@@ -19,18 +19,17 @@ const Navigation = () => {
   };
 
   const navItems = [
-    { label: 'Home', href: '#home', route: '/' },
-    { label: 'Solutions', href: '#solutions', route: '/' },
-    { label: 'Services', href: '#services', route: '/' },
-    { label: 'Contact', href: '#contact', route: '/' },
-    { label: 'About Us', href: '/about-us' },
+    { label: 'Home', href: '/' },
+    { label: 'Solutions', href: '/#solutions' },
+    { label: 'Services', href: '/#services' },
+    { label: 'Contact', href: '/#contact' },
     { label: 'Blog', href: '/blog' },
   ];
 
   const handleNavClick = (item: any) => {
-    if (item.href.startsWith('#') && location.pathname !== '/') {
-      // If we're not on home page and clicking an anchor link, go to home first
-      window.location.href = `/${item.href}`;
+    if (item.href.includes('#') && location.pathname !== '/') {
+      // If we're not on home page and clicking an anchor link, navigate to home with hash
+      window.location.href = item.href;
     }
     setIsMenuOpen(false);
   };
@@ -55,7 +54,7 @@ const Navigation = () => {
           <div className="hidden md:flex items-center justify-center flex-1">
             <div className="flex items-center space-x-8">
               {navItems.map((item) => (
-                item.href.startsWith('#') ? (
+                item.href.includes('#') ? (
                   location.pathname === '/' ? (
                     <a
                       key={item.label}
@@ -65,13 +64,14 @@ const Navigation = () => {
                       {item.label}
                     </a>
                   ) : (
-                    <Link
+                    <a
                       key={item.label}
-                      to={`/${item.href}`}
+                      href={item.href}
                       className="text-muted-foreground hover:text-cyber-400 transition-colors duration-200"
+                      onClick={() => handleNavClick(item)}
                     >
                       {item.label}
-                    </Link>
+                    </a>
                   )
                 ) : (
                   <Link
@@ -116,7 +116,7 @@ const Navigation = () => {
         <div className="md:hidden bg-background/95 backdrop-blur-md border-b border-border/20">
           <div className="px-4 py-6 space-y-4">
             {navItems.map((item) => (
-              item.href.startsWith('#') ? (
+              item.href.includes('#') ? (
                 location.pathname === '/' ? (
                   <a
                     key={item.label}
@@ -127,14 +127,14 @@ const Navigation = () => {
                     {item.label}
                   </a>
                 ) : (
-                  <Link
+                  <a
                     key={item.label}
-                    to={`/${item.href}`}
+                    href={item.href}
                     className="block text-muted-foreground hover:text-cyber-400 transition-colors duration-200"
                     onClick={() => handleNavClick(item)}
                   >
                     {item.label}
-                  </Link>
+                  </a>
                 )
               ) : (
                 <Link
