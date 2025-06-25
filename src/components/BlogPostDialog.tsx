@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -17,13 +17,40 @@ interface BlogPostDialogProps {
 
 const BlogPostDialog = ({ isOpen, onClose, onSave, onUpdate, post, mode }: BlogPostDialogProps) => {
   const [formData, setFormData] = useState({
-    title: post?.title || '',
-    excerpt: post?.excerpt || '',
-    content: post?.content || '',
-    author: post?.author || '',
-    category: post?.category || '',
-    chapter: post?.chapter || ''
+    title: '',
+    excerpt: '',
+    content: '',
+    author: '',
+    category: '',
+    chapter: ''
   });
+
+  // Reset form when dialog opens/closes or post changes
+  useEffect(() => {
+    if (isOpen) {
+      if (mode === 'edit' && post) {
+        // Pre-populate form with existing blog post data
+        setFormData({
+          title: post.title || '',
+          excerpt: post.excerpt || '',
+          content: post.content || '',
+          author: post.author || '',
+          category: post.category || '',
+          chapter: post.chapter || ''
+        });
+      } else {
+        // Reset form for new post
+        setFormData({
+          title: '',
+          excerpt: '',
+          content: '',
+          author: '',
+          category: '',
+          chapter: ''
+        });
+      }
+    }
+  }, [isOpen, mode, post]);
 
   const handleSave = () => {
     if (mode === 'create') {
@@ -32,14 +59,6 @@ const BlogPostDialog = ({ isOpen, onClose, onSave, onUpdate, post, mode }: BlogP
       onUpdate(post.id, formData);
     }
     onClose();
-    setFormData({
-      title: '',
-      excerpt: '',
-      content: '',
-      author: '',
-      category: '',
-      chapter: ''
-    });
   };
 
   return (
@@ -47,7 +66,7 @@ const BlogPostDialog = ({ isOpen, onClose, onSave, onUpdate, post, mode }: BlogP
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
-            {mode === 'create' ? 'Create New Blog Post' : 'Edit Blog Post'}
+            {mode === 'create' ? 'Create New Blog Post' : `Edit Blog Post: ${post?.title || ''}`}
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-4">

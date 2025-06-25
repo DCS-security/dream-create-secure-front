@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Shield, Edit, Plus, Trash2, Eye, Settings } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useBlogStorage } from '@/hooks/useBlogStorage';
+import { useContentStorage } from '@/hooks/useContentStorage';
 import BlogPostDialog from '@/components/BlogPostDialog';
 import ContentEditDialog from '@/components/ContentEditDialog';
 
@@ -18,6 +19,7 @@ const Admin = () => {
   const [editingSection, setEditingSection] = useState('');
   const { toast } = useToast();
   const { posts, addPost, updatePost, deletePost } = useBlogStorage();
+  const { sections } = useContentStorage();
 
   const handleLogin = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -164,27 +166,36 @@ const Admin = () => {
                 { title: 'Features', description: 'Edit solution features' },
                 { title: 'Contact Info', description: 'Update contact details' },
                 { title: 'Footer', description: 'Manage footer content' }
-              ].map((section) => (
-                <Card key={section.title} className="group hover:border-cyber-400/30 transition-colors">
-                  <CardHeader>
-                    <CardTitle className="flex items-center justify-between">
-                      {section.title}
-                      <Edit className="h-5 w-5 text-cyber-500" />
-                    </CardTitle>
-                    <CardDescription>{section.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <Button 
-                      variant="outline" 
-                      className="w-full"
-                      onClick={() => handleEditContent(section.title)}
-                    >
-                      <Eye className="h-4 w-4 mr-2" />
-                      Edit Content
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
+              ].map((section) => {
+                const sectionData = sections[section.title];
+                return (
+                  <Card key={section.title} className="group hover:border-cyber-400/30 transition-colors">
+                    <CardHeader>
+                      <CardTitle className="flex items-center justify-between">
+                        {section.title}
+                        <Edit className="h-5 w-5 text-cyber-500" />
+                      </CardTitle>
+                      <CardDescription>{section.description}</CardDescription>
+                      {sectionData && (
+                        <div className="text-xs text-muted-foreground mt-2">
+                          <p><strong>Current Title:</strong> {sectionData.title}</p>
+                          <p><strong>Description:</strong> {sectionData.description.substring(0, 50)}...</p>
+                        </div>
+                      )}
+                    </CardHeader>
+                    <CardContent>
+                      <Button 
+                        variant="outline" 
+                        className="w-full"
+                        onClick={() => handleEditContent(section.title)}
+                      >
+                        <Eye className="h-4 w-4 mr-2" />
+                        Edit Content
+                      </Button>
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
           </TabsContent>
 

@@ -1,33 +1,42 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { useContentStorage } from '@/hooks/useContentStorage';
 
 interface ContentEditDialogProps {
   isOpen: boolean;
   onClose: () => void;
   sectionTitle: string;
-  currentContent?: {
-    title?: string;
-    description?: string;
-    content?: string;
-  };
 }
 
-const ContentEditDialog = ({ isOpen, onClose, sectionTitle, currentContent }: ContentEditDialogProps) => {
+const ContentEditDialog = ({ isOpen, onClose, sectionTitle }: ContentEditDialogProps) => {
+  const { getSection, updateSection } = useContentStorage();
   const [formData, setFormData] = useState({
-    title: currentContent?.title || '',
-    description: currentContent?.description || '',
-    content: currentContent?.content || ''
+    title: '',
+    description: '',
+    content: ''
   });
   const { toast } = useToast();
 
+  useEffect(() => {
+    if (isOpen && sectionTitle) {
+      const existingContent = getSection(sectionTitle);
+      if (existingContent) {
+        setFormData({
+          title: existingContent.title,
+          description: existingContent.description,
+          content: existingContent.content
+        });
+      }
+    }
+  }, [isOpen, sectionTitle, getSection]);
+
   const handleSave = () => {
-    // In a real application, this would update the actual content
-    // For now, we'll just show a toast and close the dialog
+    updateSection(sectionTitle, formData);
     toast({
       title: "Content Updated",
       description: `${sectionTitle} has been updated successfully!`,
