@@ -1,8 +1,7 @@
-
 import { useState } from 'react';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -29,77 +28,63 @@ const Navigation = () => {
   ];
 
   const handleNavClick = (item: any) => {
-    if (item.type === 'anchor') {
+    setIsMenuOpen(false);
+
+    if (item.type === 'route') {
+      navigate(item.href);
+    } else if (item.type === 'anchor') {
       if (location.pathname === '/') {
-        // If we're on home page, just scroll to anchor
         const element = document.querySelector(item.href);
         if (element) {
           element.scrollIntoView({ behavior: 'smooth' });
         }
       } else {
-        // If we're not on home page, navigate to home with hash
-        navigate(`/${item.href}`);
+        navigate('/');
+        setTimeout(() => {
+          const element = document.querySelector(item.href);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+          }
+        }, 100);
       }
     }
-    setIsMenuOpen(false);
   };
 
   return (
-    <nav className="bg-background/80 backdrop-blur-md border-b border-border/20">
+    <nav className="bg-background/80 backdrop-blur-md border-b border-border/20 z-50 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2 flex-shrink-0">
-            <img 
-              src="/lovable-uploads/7568cbcf-4c07-4726-8aa4-67b0c06a3670.png" 
-              alt="DCS Logo" 
+          <button
+            onClick={() => handleNavClick({ href: '/', type: 'route' })}
+            className="flex items-center space-x-2 flex-shrink-0"
+          >
+            <img
+              src="/lovable-uploads/7568cbcf-4c07-4726-8aa4-67b0c06a3670.png"
+              alt="DCS Logo"
               className="h-8 w-8"
             />
             <span className="text-xl font-bold bg-gradient-to-r from-cyber-400 to-cyber-500 bg-clip-text text-transparent">
               DCS
             </span>
-          </Link>
+          </button>
 
-          {/* Desktop Navigation - Centered */}
+          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center justify-center flex-1">
             <div className="flex items-center space-x-8">
               {navItems.map((item) => (
-                item.type === 'anchor' ? (
-                  location.pathname === '/' ? (
-                    <a
-                      key={item.label}
-                      href={item.href}
-                      className="text-muted-foreground hover:text-cyber-400 transition-colors duration-200 cursor-pointer"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleNavClick(item);
-                      }}
-                    >
-                      {item.label}
-                    </a>
-                  ) : (
-                    <button
-                      key={item.label}
-                      className="text-muted-foreground hover:text-cyber-400 transition-colors duration-200 cursor-pointer"
-                      onClick={() => handleNavClick(item)}
-                    >
-                      {item.label}
-                    </button>
-                  )
-                ) : (
-                  <Link
-                    key={item.label}
-                    to={item.href}
-                    className="text-muted-foreground hover:text-cyber-400 transition-colors duration-200"
-                  >
-                    {item.label}
-                  </Link>
-                )
+                <button
+                  key={item.label}
+                  onClick={() => handleNavClick(item)}
+                  className="text-muted-foreground hover:text-cyber-400 transition-colors duration-200 cursor-pointer"
+                >
+                  {item.label}
+                </button>
               ))}
             </div>
           </div>
 
-          {/* Theme Toggle */}
+          {/* Theme Toggle & Mobile Menu Button */}
           <div className="flex items-center space-x-4 flex-shrink-0">
             <Button
               variant="ghost"
@@ -110,7 +95,6 @@ const Navigation = () => {
               {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </Button>
 
-            {/* Mobile Menu Button */}
             <div className="md:hidden">
               <Button
                 variant="ghost"
@@ -129,38 +113,13 @@ const Navigation = () => {
         <div className="md:hidden bg-background/95 backdrop-blur-md border-b border-border/20">
           <div className="px-4 py-6 space-y-4">
             {navItems.map((item) => (
-              item.type === 'anchor' ? (
-                location.pathname === '/' ? (
-                  <a
-                    key={item.label}
-                    href={item.href}
-                    className="block text-muted-foreground hover:text-cyber-400 transition-colors duration-200 cursor-pointer"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleNavClick(item);
-                    }}
-                  >
-                    {item.label}
-                  </a>
-                ) : (
-                  <button
-                    key={item.label}
-                    className="block text-left w-full text-muted-foreground hover:text-cyber-400 transition-colors duration-200 cursor-pointer"
-                    onClick={() => handleNavClick(item)}
-                  >
-                    {item.label}
-                  </button>
-                )
-              ) : (
-                <Link
-                  key={item.label}
-                  to={item.href}
-                  className="block text-muted-foreground hover:text-cyber-400 transition-colors duration-200"
-                  onClick={() => handleNavClick(item)}
-                >
-                  {item.label}
-                </Link>
-              )
+              <button
+                key={item.label}
+                onClick={() => handleNavClick(item)}
+                className="block w-full text-left text-muted-foreground hover:text-cyber-400 transition-colors duration-200 cursor-pointer"
+              >
+                {item.label}
+              </button>
             ))}
             <Button
               variant="ghost"
