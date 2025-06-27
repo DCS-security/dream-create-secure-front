@@ -6,11 +6,11 @@ import { Search, Calendar, User, ArrowRight } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { useBlogStorage } from '@/hooks/useBlogStorage';
+import { useGitHubBlogStorage } from '@/hooks/useGitHubBlogStorage';
 
 const Blog = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const { posts } = useBlogStorage();
+  const { posts, isLoading } = useGitHubBlogStorage();
 
   const filteredPosts = posts.filter(post =>
     post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -36,7 +36,6 @@ const Blog = () => {
           </div>
         </section>
 
-        {/* Search Section */}
         <section className="py-12 bg-muted/20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-2xl mx-auto">
@@ -57,58 +56,66 @@ const Blog = () => {
         {/* Blog Posts */}
         <section className="py-24 bg-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredPosts.map((post, index) => (
-                <Card 
-                  key={post.id}
-                  className="group transition-all duration-300 border-border/50 hover:border-cyber-400/30 bg-card/50 backdrop-blur-sm animate-fade-in cursor-pointer hover:shadow-lg"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <CardHeader>
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="px-3 py-1 bg-cyber-500/10 text-cyber-400 rounded-full text-sm border border-cyber-500/20">
-                        Chapter {post.chapter}
-                      </span>
-                      <span className="text-sm text-muted-foreground">
-                        {post.category}
-                      </span>
-                    </div>
-                    <CardTitle className="text-xl font-semibold group-hover:text-cyber-400 transition-colors">
-                      {post.title}
-                    </CardTitle>
-                    <CardDescription className="text-base">
-                      {post.excerpt}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="flex items-center justify-between text-sm text-muted-foreground">
-                      <div className="flex items-center space-x-2">
-                        <User className="h-4 w-4" />
-                        <span>{post.author}</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Calendar className="h-4 w-4" />
-                        <span>{new Date(post.date).toLocaleDateString()}</span>
-                      </div>
-                    </div>
-                    <Button 
-                      variant="ghost" 
-                      className="w-full group-hover:text-cyber-400 transition-colors"
-                    >
-                      Read More
-                      <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-            
-            {filteredPosts.length === 0 && (
+            {isLoading ? (
               <div className="text-center py-12">
-                <p className="text-xl text-muted-foreground">
-                  No blog posts found matching your search criteria.
-                </p>
+                <p className="text-xl text-muted-foreground">Loading posts...</p>
               </div>
+            ) : (
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {filteredPosts.map((post, index) => (
+                    <Card 
+                      key={post.id}
+                      className="group transition-all duration-300 border-border/50 hover:border-cyber-400/30 bg-card/50 backdrop-blur-sm animate-fade-in cursor-pointer hover:shadow-lg"
+                      style={{ animationDelay: `${index * 0.1}s` }}
+                    >
+                      <CardHeader>
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="px-3 py-1 bg-cyber-500/10 text-cyber-400 rounded-full text-sm border border-cyber-500/20">
+                            Chapter {post.chapter}
+                          </span>
+                          <span className="text-sm text-muted-foreground">
+                            {post.category}
+                          </span>
+                        </div>
+                        <CardTitle className="text-xl font-semibold group-hover:text-cyber-400 transition-colors">
+                          {post.title}
+                        </CardTitle>
+                        <CardDescription className="text-base">
+                          {post.excerpt}
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div className="flex items-center justify-between text-sm text-muted-foreground">
+                          <div className="flex items-center space-x-2">
+                            <User className="h-4 w-4" />
+                            <span>{post.author}</span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Calendar className="h-4 w-4" />
+                            <span>{new Date(post.date).toLocaleDateString()}</span>
+                          </div>
+                        </div>
+                        <Button 
+                          variant="ghost" 
+                          className="w-full group-hover:text-cyber-400 transition-colors"
+                        >
+                          Read More
+                          <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+                
+                {filteredPosts.length === 0 && (
+                  <div className="text-center py-12">
+                    <p className="text-xl text-muted-foreground">
+                      No blog posts found matching your search criteria.
+                    </p>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </section>

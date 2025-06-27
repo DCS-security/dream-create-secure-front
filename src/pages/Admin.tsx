@@ -3,12 +3,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Shield, Edit, Plus, Trash2, Eye, Settings } from 'lucide-react';
+import { Shield, Edit, Plus, Trash2, Eye, Settings, Github, Cloud } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { useBlogStorage } from '@/hooks/useBlogStorage';
+import { useGitHubBlogStorage } from '@/hooks/useGitHubBlogStorage';
 import { useContentStorage } from '@/hooks/useContentStorage';
 import BlogPostDialog from '@/components/BlogPostDialog';
 import ContentEditDialog from '@/components/ContentEditDialog';
+import GitHubConfigDialog from '@/components/GitHubConfigDialog';
 
 const Admin = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -17,8 +18,9 @@ const Admin = () => {
   const [editingPost, setEditingPost] = useState<any>(null);
   const [contentDialogOpen, setContentDialogOpen] = useState(false);
   const [editingSection, setEditingSection] = useState('');
+  const [githubConfigOpen, setGithubConfigOpen] = useState(false);
   const { toast } = useToast();
-  const { posts, addPost, updatePost, deletePost } = useBlogStorage();
+  const { posts, isLoading, addPost, updatePost, deletePost, configureGitHub, isGitHubConfigured } = useGitHubBlogStorage();
   const { sections } = useContentStorage();
 
   const handleLogin = (e?: React.FormEvent) => {
@@ -46,16 +48,16 @@ const Admin = () => {
     }
   };
 
-  const handleBlogCreate = (postData: any) => {
-    addPost(postData);
+  const handleBlogCreate = async (postData: any) => {
+    await addPost(postData);
     toast({
       title: "Blog Post Created",
       description: "Your blog post has been published successfully!",
     });
   };
 
-  const handleBlogUpdate = (id: string, postData: any) => {
-    updatePost(id, postData);
+  const handleBlogUpdate = async (id: string, postData: any) => {
+    await updatePost(id, postData);
     toast({
       title: "Blog Post Updated",
       description: "Your blog post has been updated successfully!",
@@ -63,8 +65,8 @@ const Admin = () => {
     setEditingPost(null);
   };
 
-  const handleBlogDelete = (id: string) => {
-    deletePost(id);
+  const handleBlogDelete = async (id: string) => {
+    await deletePost(id);
     toast({
       title: "Blog Post Deleted",
       description: "The blog post has been deleted successfully!",
@@ -74,6 +76,14 @@ const Admin = () => {
   const handleEditContent = (sectionTitle: string) => {
     setEditingSection(sectionTitle);
     setContentDialogOpen(true);
+  };
+
+  const handleGitHubConfig = (config: { owner: string; repo: string; token: string }) => {
+    configureGitHub(config);
+    toast({
+      title: "GitHub Configured",
+      description: "Your blog data will now sync with GitHub!",
+    });
   };
 
   if (!isAuthenticated) {
@@ -133,12 +143,33 @@ const Admin = () => {
     <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-cyber-400 to-cyber-500 bg-clip-text text-transparent">
-            Admin Dashboard
-          </h1>
-          <p className="text-muted-foreground">
-            Manage your website content, blog posts, and settings
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-cyber-400 to-cyber-500 bg-clip-text text-transparent">
+                Admin Dashboard
+              </h1>
+              <p className="text-muted-foreground">
+                Manage your website content, blog posts, and settings
+              </p>
+            </div>
+            <div className="flex items-center space-x-2">
+              {isGitHubConfigured ? (
+                <div className="flex items-center space-x-2 px-3 py-2 bg-green-50 border border-green-200 rounded-lg">
+                  <Github className="h-4 w-4 text-green-600" />
+                  <span className="text-sm text-green-800">GitHub Connected</span>
+                </div>
+              ) : (
+                <Button 
+                  variant="outline" 
+                  onClick={() => setGithubConfigOpen(true)}
+                  className="border-cyber-400/30 hover:bg-cyber-50"
+                >
+                  <Cloud className="h-4 w-4 mr-2" />
+                  Configure GitHub Storage
+                </Button>
+              )}
+            </div>
+          </div>
         </div>
 
         <Tabs defaultValue="content" className="space-y-6">
@@ -214,83 +245,119 @@ const Admin = () => {
                     </Button>
                   </CardTitle>
                   <CardDescription>
-                    Manage your blog posts
+                    Manage your blog posts {isGitHubConfigured && '(synced with GitHub)'}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    {posts.map((post) => (
-                      <div key={post.id} className="flex items-center justify-between p-4 border border-border/50 rounded-lg">
-                        <div className="flex-1">
-                          <h4 className="font-semibold">{post.title}</h4>
-                          <p className="text-sm text-muted-foreground">
-                            Chapter {post.chapter} • {post.category} • {new Date(post.date).toLocaleDateString()}
-                          </p>
-                          <p className="text-sm text-muted-foreground mt-1">{post.excerpt}</p>
+                  {isLoading ? (
+                    <div className="text-center py-8">
+                      <p className="text-muted-foreground">Loading posts...</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {posts.map((post) => (
+                        <div key={post.id} className="flex items-center justify-between p-4 border border-border/50 rounded-lg">
+                          <div className="flex-1">
+                            <h4 className="font-semibold">{post.title}</h4>
+                            <p className="text-sm text-muted-foreground">
+                              Chapter {post.chapter} • {post.category} • {new Date(post.date).toLocaleDateString()}
+                            </p>
+                            <p className="text-sm text-muted-foreground mt-1">{post.excerpt}</p>
+                          </div>
+                          <div className="flex space-x-2">
+                            <Button 
+                              variant="outline" 
+                              size="sm"
+                              onClick={() => {
+                                setEditingPost(post);
+                                setBlogDialogOpen(true);
+                              }}
+                            >
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button 
+                              variant="outline" 
+                              size="sm"
+                              onClick={() => handleBlogDelete(post.id)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
                         </div>
-                        <div className="flex space-x-2">
-                          <Button 
-                            variant="outline" 
-                            size="sm"
-                            onClick={() => {
-                              setEditingPost(post);
-                              setBlogDialogOpen(true);
-                            }}
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button 
-                            variant="outline" 
-                            size="sm"
-                            onClick={() => handleBlogDelete(post.id)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
+                      ))}
+                      {posts.length === 0 && (
+                        <div className="text-center py-8 text-muted-foreground">
+                          No blog posts yet. Create your first post!
                         </div>
-                      </div>
-                    ))}
-                    {posts.length === 0 && (
-                      <div className="text-center py-8 text-muted-foreground">
-                        No blog posts yet. Create your first post!
-                      </div>
-                    )}
-                  </div>
+                      )}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </div>
           </TabsContent>
 
           <TabsContent value="settings">
-            
-            <Card>
-              <CardHeader>
-                <CardTitle>Website Settings</CardTitle>
-                <CardDescription>
-                  Configure global website settings
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Site Title</label>
-                  <Input defaultValue="DCS - Dream. Create. Secure." />
-                </div>
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Site Description</label>
-                  <Input defaultValue="AI-Powered Cybersecurity Solutions" />
-                </div>
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Contact Email</label>
-                  <Input defaultValue="info@devanshcybersec.in" />
-                </div>
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Contact Phone</label>
-                  <Input defaultValue="+91 9082678303" />
-                </div>
-                <Button className="bg-cyber-500 hover:bg-cyber-600">
-                  Save Settings
-                </Button>
-              </CardContent>
-            </Card>
+            <div className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Storage Configuration</CardTitle>
+                  <CardDescription>
+                    Configure how your data is stored and synced
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-center justify-between p-4 border border-border/50 rounded-lg">
+                    <div className="flex items-center space-x-3">
+                      <Github className="h-6 w-6 text-gray-600" />
+                      <div>
+                        <h4 className="font-medium">GitHub Storage</h4>
+                        <p className="text-sm text-muted-foreground">
+                          {isGitHubConfigured ? 'Connected and syncing' : 'Store posts as JSON files in GitHub'}
+                        </p>
+                      </div>
+                    </div>
+                    <Button 
+                      variant={isGitHubConfigured ? "outline" : "default"}
+                      onClick={() => setGithubConfigOpen(true)}
+                      className={!isGitHubConfigured ? "bg-cyber-500 hover:bg-cyber-600" : ""}
+                    >
+                      {isGitHubConfigured ? 'Reconfigure' : 'Setup GitHub'}
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Website Settings</CardTitle>
+                  <CardDescription>
+                    Configure global website settings
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">Site Title</label>
+                    <Input defaultValue="DCS - Dream. Create. Secure." />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">Site Description</label>
+                    <Input defaultValue="AI-Powered Cybersecurity Solutions" />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">Contact Email</label>
+                    <Input defaultValue="info@devanshcybersec.in" />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">Contact Phone</label>
+                    <Input defaultValue="+91 9082678303" />
+                  </div>
+                  <Button className="bg-cyber-500 hover:bg-cyber-600">
+                    Save Settings
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
         </Tabs>
 
@@ -310,6 +377,12 @@ const Admin = () => {
           isOpen={contentDialogOpen}
           onClose={() => setContentDialogOpen(false)}
           sectionTitle={editingSection}
+        />
+
+        <GitHubConfigDialog
+          isOpen={githubConfigOpen}
+          onClose={() => setGithubConfigOpen(false)}
+          onSave={handleGitHubConfig}
         />
       </div>
     </div>
