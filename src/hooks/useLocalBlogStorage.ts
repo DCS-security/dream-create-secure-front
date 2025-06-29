@@ -15,25 +15,20 @@ export const useLocalBlogStorage = () => {
   const loadPosts = async () => {
     setIsLoading(true);
     try {
-      // First try to load from localStorage (for immediate display)
-      const savedPosts = localStorage.getItem('dcs_blog_posts');
-      if (savedPosts) {
-        setPosts(JSON.parse(savedPosts));
-      }
+      // First try to load from individual files in localStorage
+      const storagePosts = await fileService.getAllPostsFromStorage();
+      setPosts(storagePosts);
       
-      // Then try to load from files (for updated content)
+      // Then try to load from actual files (for future file system integration)
       const filePosts = await fileService.getAllPosts();
       if (filePosts.length > 0) {
         setPosts(filePosts);
-        localStorage.setItem('dcs_blog_posts', JSON.stringify(filePosts));
       }
     } catch (error) {
       console.error('Error loading posts:', error);
-      // Fallback to localStorage
-      const savedPosts = localStorage.getItem('dcs_blog_posts');
-      if (savedPosts) {
-        setPosts(JSON.parse(savedPosts));
-      }
+      // Fallback to default posts
+      const storagePosts = await fileService.getAllPostsFromStorage();
+      setPosts(storagePosts);
     } finally {
       setIsLoading(false);
     }
@@ -49,8 +44,7 @@ export const useLocalBlogStorage = () => {
     
     const success = await fileService.savePost(newPost);
     if (success) {
-      const newPosts = [newPost, ...posts];
-      setPosts(newPosts);
+      setPosts(prevPosts => [newPost, ...prevPosts]);
     }
     return newPost;
   };
@@ -69,18 +63,18 @@ export const useLocalBlogStorage = () => {
 
     const success = await fileService.savePost(updatedFullPost);
     if (success) {
-      const newPosts = posts.map(post => 
-        post.id === id ? updatedFullPost : post
+      setPosts(prevPosts => 
+        prevPosts.map(post => 
+          post.id === id ? updatedFullPost : post
+        )
       );
-      setPosts(newPosts);
     }
   };
 
   const deletePost = async (id: string) => {
     const success = await fileService.deletePost(id);
     if (success) {
-      const newPosts = posts.filter(post => post.id !== id);
-      setPosts(newPosts);
+      setPosts(prevPosts => prevPosts.filter(post => post.id !== id));
     }
   };
 

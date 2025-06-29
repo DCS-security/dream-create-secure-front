@@ -12,7 +12,7 @@ interface BlogPost {
 }
 
 class LocalFileStorageService {
-  private basePath = '/data/posts';
+  private basePath = '/data/blogs';
 
   async getPost(slug: string): Promise<BlogPost | null> {
     try {
@@ -29,15 +29,17 @@ class LocalFileStorageService {
 
   async getAllPosts(): Promise<BlogPost[]> {
     try {
-      // For now, we'll use a manifest file to list all posts
+      // Try to load from manifest file that lists all blog files
       const response = await fetch(`${this.basePath}/manifest.json`);
       if (!response.ok) {
+        console.log('No manifest found, using default posts');
         return this.getDefaultPosts();
       }
       
       const manifest = await response.json();
       const posts: BlogPost[] = [];
       
+      // Load each blog file individually
       for (const slug of manifest.posts) {
         const post = await this.getPost(slug);
         if (post) {
@@ -58,7 +60,7 @@ class LocalFileStorageService {
         id: '1',
         title: 'The Future of AI in Cybersecurity - Chapter 1: Introduction',
         excerpt: 'Exploring how artificial intelligence is revolutionizing the cybersecurity landscape and what it means for businesses.',
-        content: 'Artificial Intelligence is transforming cybersecurity in unprecedented ways. This comprehensive guide explores the current state and future potential of AI-powered security solutions.',
+        content: 'Artificial Intelligence is transforming cybersecurity in unprecedented ways. This comprehensive guide explores the current state and future potential of AI-powered security solutions. From automated threat detection to predictive analytics, AI is becoming an indispensable tool in the cybersecurity arsenal.',
         author: 'Deep Gada',
         date: '2024-01-15',
         category: 'AI Security',
@@ -69,7 +71,7 @@ class LocalFileStorageService {
         id: '2',
         title: 'Machine Learning Threat Detection - Chapter 2: Advanced Algorithms',
         excerpt: 'Deep dive into machine learning algorithms that can identify and prevent sophisticated cyber threats.',
-        content: 'Machine learning algorithms are becoming increasingly sophisticated in their ability to detect and prevent cyber threats. This chapter explores the most effective approaches.',
+        content: 'Machine learning algorithms are becoming increasingly sophisticated in their ability to detect and prevent cyber threats. This chapter explores the most effective approaches including supervised learning for known threat patterns, unsupervised learning for anomaly detection, and reinforcement learning for adaptive security systems.',
         author: 'Hitansh Shah',
         date: '2024-01-10',
         category: 'ML Security',
@@ -79,22 +81,21 @@ class LocalFileStorageService {
     ];
   }
 
-  // Note: These methods will need to be implemented with a backend API
-  // For now, they'll use localStorage as fallback
   async savePost(post: BlogPost): Promise<boolean> {
     try {
-      // In a real implementation, this would save to the file system
-      // For now, we'll use localStorage as a fallback
-      const posts = await this.getAllPosts();
-      const existingIndex = posts.findIndex(p => p.id === post.id);
+      // In a real implementation, this would save individual files
+      // For now, we'll simulate by updating localStorage with individual entries
+      localStorage.setItem(`dcs_blog_${post.slug}`, JSON.stringify(post));
       
-      if (existingIndex >= 0) {
-        posts[existingIndex] = post;
-      } else {
-        posts.unshift(post);
+      // Update the manifest
+      const existingManifest = localStorage.getItem('dcs_blog_manifest');
+      let manifest = existingManifest ? JSON.parse(existingManifest) : { posts: [] };
+      
+      if (!manifest.posts.includes(post.slug)) {
+        manifest.posts.unshift(post.slug);
       }
       
-      localStorage.setItem('dcs_blog_posts', JSON.stringify(posts));
+      localStorage.setItem('dcs_blog_manifest', JSON.stringify(manifest));
       return true;
     } catch (error) {
       console.error('Error saving post:', error);
@@ -104,13 +105,51 @@ class LocalFileStorageService {
 
   async deletePost(id: string): Promise<boolean> {
     try {
+      // Find the post to get its slug
       const posts = await this.getAllPosts();
-      const filteredPosts = posts.filter(p => p.id !== id);
-      localStorage.setItem('dcs_blog_posts', JSON.stringify(filteredPosts));
+      const post = posts.find(p => p.id === id);
+      if (!post) return false;
+      
+      // Remove from localStorage
+      localStorage.removeItem(`dcs_blog_${post.slug}`);
+      
+      // Update manifest
+      const existingManifest = localStorage.getItem('dcs_blog_manifest');
+      if (existingManifest) {
+        const manifest = JSON.parse(existingManifest);
+        manifest.posts = manifest.posts.filter((slug: string) => slug !== post.slug);
+        localStorage.setItem('dcs_blog_manifest', JSON.stringify(manifest));
+      }
+      
       return true;
     } catch (error) {
       console.error('Error deleting post:', error);
       return false;
+    }
+  }
+
+  // Override getAllPosts to check localStorage first for individual files
+  async getAllPostsFromStorage(): Promise<BlogPost[]> {
+    try {
+      const manifest = localStorage.getItem('dcs_blog_manifest');
+      if (!manifest) {
+        return this.getDefaultPosts();
+      }
+      
+      const { posts: slugs } = JSON.parse(manifest);
+      const posts: BlogPost[] = [];
+      
+      for (const slug of slugs) {
+        const postData = localStorage.getItem(`dcs_blog_${slug}`);
+        if (postData) {
+          posts.push(JSON.parse(postData));
+        }
+      }
+      
+      return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    } catch (error) {
+      console.error('Error loading posts from storage:', error);
+      return this.getDefaultPosts();
     }
   }
 }
