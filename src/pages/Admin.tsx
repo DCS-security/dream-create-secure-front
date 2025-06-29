@@ -1,15 +1,15 @@
+
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Shield, Edit, Plus, Trash2, Eye, Settings, Github, Cloud } from 'lucide-react';
+import { Shield, Edit, Plus, Trash2, Eye, Settings, RefreshCw } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { useGitHubBlogStorage } from '@/hooks/useGitHubBlogStorage';
+import { useLocalBlogStorage } from '@/hooks/useLocalBlogStorage';
 import { useContentStorage } from '@/hooks/useContentStorage';
 import BlogPostDialog from '@/components/BlogPostDialog';
 import ContentEditDialog from '@/components/ContentEditDialog';
-import GitHubConfigDialog from '@/components/GitHubConfigDialog';
 
 const Admin = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -18,9 +18,8 @@ const Admin = () => {
   const [editingPost, setEditingPost] = useState<any>(null);
   const [contentDialogOpen, setContentDialogOpen] = useState(false);
   const [editingSection, setEditingSection] = useState('');
-  const [githubConfigOpen, setGithubConfigOpen] = useState(false);
   const { toast } = useToast();
-  const { posts, isLoading, addPost, updatePost, deletePost, configureGitHub, isGitHubConfigured } = useGitHubBlogStorage();
+  const { posts, isLoading, addPost, updatePost, deletePost, refreshPosts } = useLocalBlogStorage();
   const { sections } = useContentStorage();
 
   const handleLogin = (e?: React.FormEvent) => {
@@ -52,7 +51,7 @@ const Admin = () => {
     await addPost(postData);
     toast({
       title: "Blog Post Created",
-      description: "Your blog post has been published successfully!",
+      description: "Your blog post has been saved successfully!",
     });
   };
 
@@ -78,11 +77,11 @@ const Admin = () => {
     setContentDialogOpen(true);
   };
 
-  const handleGitHubConfig = (config: { owner: string; repo: string; token: string }) => {
-    configureGitHub(config);
+  const handleRefreshPosts = async () => {
+    await refreshPosts();
     toast({
-      title: "GitHub Configured",
-      description: "Your blog data will now sync with GitHub!",
+      title: "Posts Refreshed",
+      description: "Blog posts have been refreshed from files!",
     });
   };
 
@@ -149,25 +148,13 @@ const Admin = () => {
                 Admin Dashboard
               </h1>
               <p className="text-muted-foreground">
-                Manage your website content, blog posts, and settings
+                Manage your website content and blog posts stored in local files
               </p>
             </div>
             <div className="flex items-center space-x-2">
-              {isGitHubConfigured ? (
-                <div className="flex items-center space-x-2 px-3 py-2 bg-green-50 border border-green-200 rounded-lg">
-                  <Github className="h-4 w-4 text-green-600" />
-                  <span className="text-sm text-green-800">GitHub Connected</span>
-                </div>
-              ) : (
-                <Button 
-                  variant="outline" 
-                  onClick={() => setGithubConfigOpen(true)}
-                  className="border-cyber-400/30 hover:bg-cyber-50"
-                >
-                  <Cloud className="h-4 w-4 mr-2" />
-                  Configure GitHub Storage
-                </Button>
-              )}
+              <div className="flex items-center space-x-2 px-3 py-2 bg-green-50 border border-green-200 rounded-lg">
+                <span className="text-sm text-green-800">Local File Storage</span>
+              </div>
             </div>
           </div>
         </div>
@@ -236,16 +223,26 @@ const Admin = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center justify-between">
                     Blog Management
-                    <Button 
-                      onClick={() => setBlogDialogOpen(true)}
-                      className="bg-cyber-500 hover:bg-cyber-600"
-                    >
-                      <Plus className="h-4 w-4 mr-2" />
-                      New Post
-                    </Button>
+                    <div className="flex space-x-2">
+                      <Button 
+                        variant="outline"
+                        onClick={handleRefreshPosts}
+                        className="border-cyber-400/30 hover:bg-cyber-50"
+                      >
+                        <RefreshCw className="h-4 w-4 mr-2" />
+                        Refresh
+                      </Button>
+                      <Button 
+                        onClick={() => setBlogDialogOpen(true)}
+                        className="bg-cyber-500 hover:bg-cyber-600"
+                      >
+                        <Plus className="h-4 w-4 mr-2" />
+                        New Post
+                      </Button>
+                    </div>
                   </CardTitle>
                   <CardDescription>
-                    Manage your blog posts {isGitHubConfigured && '(synced with GitHub)'}
+                    Manage your blog posts stored as JSON files in the data/posts folder
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -303,27 +300,22 @@ const Admin = () => {
                 <CardHeader>
                   <CardTitle>Storage Configuration</CardTitle>
                   <CardDescription>
-                    Configure how your data is stored and synced
+                    Blog posts are stored as JSON files in the data/posts folder
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex items-center justify-between p-4 border border-border/50 rounded-lg">
                     <div className="flex items-center space-x-3">
-                      <Github className="h-6 w-6 text-gray-600" />
                       <div>
-                        <h4 className="font-medium">GitHub Storage</h4>
+                        <h4 className="font-medium">Local File Storage</h4>
                         <p className="text-sm text-muted-foreground">
-                          {isGitHubConfigured ? 'Connected and syncing' : 'Store posts as JSON files in GitHub'}
+                          Posts are stored as individual JSON files for easy management
                         </p>
                       </div>
                     </div>
-                    <Button 
-                      variant={isGitHubConfigured ? "outline" : "default"}
-                      onClick={() => setGithubConfigOpen(true)}
-                      className={!isGitHubConfigured ? "bg-cyber-500 hover:bg-cyber-600" : ""}
-                    >
-                      {isGitHubConfigured ? 'Reconfigure' : 'Setup GitHub'}
-                    </Button>
+                    <div className="px-3 py-2 bg-green-50 border border-green-200 rounded-lg">
+                      <span className="text-sm text-green-800">Active</span>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -377,12 +369,6 @@ const Admin = () => {
           isOpen={contentDialogOpen}
           onClose={() => setContentDialogOpen(false)}
           sectionTitle={editingSection}
-        />
-
-        <GitHubConfigDialog
-          isOpen={githubConfigOpen}
-          onClose={() => setGithubConfigOpen(false)}
-          onSave={handleGitHubConfig}
         />
       </div>
     </div>

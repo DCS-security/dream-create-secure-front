@@ -6,11 +6,11 @@ import { Search, Calendar, User, ArrowRight } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { useGitHubBlogStorage } from '@/hooks/useGitHubBlogStorage';
+import { useLocalBlogStorage } from '@/hooks/useLocalBlogStorage';
 
 const Blog = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const { posts, isLoading } = useGitHubBlogStorage();
+  const { posts, isLoading } = useLocalBlogStorage();
 
   const filteredPosts = posts.filter(post =>
     post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
