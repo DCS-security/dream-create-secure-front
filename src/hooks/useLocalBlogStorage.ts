@@ -15,20 +15,11 @@ export const useLocalBlogStorage = () => {
   const loadPosts = async () => {
     setIsLoading(true);
     try {
-      // First try to load from individual files in localStorage
-      const storagePosts = await fileService.getAllPostsFromStorage();
-      setPosts(storagePosts);
-      
-      // Then try to load from actual files (for future file system integration)
-      const filePosts = await fileService.getAllPosts();
-      if (filePosts.length > 0) {
-        setPosts(filePosts);
-      }
+      const allPosts = await fileService.getAllPosts();
+      setPosts(allPosts);
     } catch (error) {
       console.error('Error loading posts:', error);
-      // Fallback to default posts
-      const storagePosts = await fileService.getAllPostsFromStorage();
-      setPosts(storagePosts);
+      setPosts([]);
     } finally {
       setIsLoading(false);
     }
@@ -44,7 +35,8 @@ export const useLocalBlogStorage = () => {
     
     const success = await fileService.savePost(newPost);
     if (success) {
-      setPosts(prevPosts => [newPost, ...prevPosts]);
+      // Reload all posts to get the updated list
+      await loadPosts();
     }
     return newPost;
   };
@@ -63,18 +55,16 @@ export const useLocalBlogStorage = () => {
 
     const success = await fileService.savePost(updatedFullPost);
     if (success) {
-      setPosts(prevPosts => 
-        prevPosts.map(post => 
-          post.id === id ? updatedFullPost : post
-        )
-      );
+      // Reload all posts to get the updated list
+      await loadPosts();
     }
   };
 
   const deletePost = async (id: string) => {
     const success = await fileService.deletePost(id);
     if (success) {
-      setPosts(prevPosts => prevPosts.filter(post => post.id !== id));
+      // Reload all posts to get the updated list
+      await loadPosts();
     }
   };
 

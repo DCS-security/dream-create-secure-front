@@ -13,9 +13,17 @@ interface BlogPost {
 
 class LocalFileStorageService {
   private basePath = '/for-blogs';
+  private localStoragePrefix = 'blog_';
 
   async getPost(slug: string): Promise<BlogPost | null> {
     try {
+      // First try to get from localStorage (for user-created/edited posts)
+      const localPost = this.getFromLocalStorage(slug);
+      if (localPost) {
+        return localPost;
+      }
+
+      // Then try to fetch from actual files
       const response = await fetch(`${this.basePath}/${slug}.json`);
       if (!response.ok) {
         return null;
@@ -29,22 +37,36 @@ class LocalFileStorageService {
 
   async getAllPosts(): Promise<BlogPost[]> {
     try {
-      // Try to load from manifest file that lists all blog files
-      const response = await fetch(`${this.basePath}/manifest.json`);
-      if (!response.ok) {
-        console.log('No manifest found, using default posts');
-        return this.getDefaultPosts();
-      }
-      
-      const manifest = await response.json();
       const posts: BlogPost[] = [];
       
-      // Load each blog file individually
-      for (const slug of manifest.posts) {
-        const post = await this.getPost(slug);
-        if (post) {
-          posts.push(post);
+      // First, load all posts from localStorage
+      const localPosts = this.getAllFromLocalStorage();
+      posts.push(...localPosts);
+
+      // Then try to load from actual files
+      try {
+        const response = await fetch(`${this.basePath}/manifest.json`);
+        if (response.ok) {
+          const manifest = await response.json();
+          
+          // Load each blog file that's not already in localStorage
+          for (const slug of manifest.posts) {
+            const existsInLocal = localPosts.some(p => p.slug === slug);
+            if (!existsInLocal) {
+              const post = await this.getPost(slug);
+              if (post) {
+                posts.push(post);
+              }
+            }
+          }
         }
+      } catch (error) {
+        console.log('No manifest found or error loading it:', error);
+      }
+
+      // If no posts found, return default posts
+      if (posts.length === 0) {
+        return this.getDefaultPosts();
       }
       
       return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -83,11 +105,11 @@ class LocalFileStorageService {
 
   async savePost(post: BlogPost): Promise<boolean> {
     try {
-      // Create the blog post file
-      await this.writeFile(`${this.basePath}/${post.slug}.json`, JSON.stringify(post, null, 2));
+      // Save to localStorage for immediate persistence
+      this.saveToLocalStorage(post);
       
-      // Update the manifest
-      await this.updateManifest(post.slug);
+      console.log(`Blog post "${post.title}" saved locally. File would be created at: ${this.basePath}/${post.slug}.json`);
+      console.log('Post data:', JSON.stringify(post, null, 2));
       
       return true;
     } catch (error) {
@@ -103,11 +125,10 @@ class LocalFileStorageService {
       const post = posts.find(p => p.id === id);
       if (!post) return false;
       
-      // Delete the blog post file
-      await this.deleteFile(`${this.basePath}/${post.slug}.json`);
+      // Remove from localStorage
+      this.removeFromLocalStorage(post.slug);
       
-      // Update manifest to remove the post
-      await this.removeFromManifest(post.slug);
+      console.log(`Blog post "${post.title}" deleted locally. File would be deleted at: ${this.basePath}/${post.slug}.json`);
       
       return true;
     } catch (error) {
@@ -116,93 +137,84 @@ class LocalFileStorageService {
     }
   }
 
-  private async updateManifest(slug: string): Promise<void> {
+  // localStorage methods for persistence
+  private saveToLocalStorage(post: BlogPost): void {
+    const key = `${this.localStoragePrefix}${post.slug}`;
+    localStorage.setItem(key, JSON.stringify(post));
+    
+    // Update the list of all post slugs
+    this.updateLocalStorageIndex(post.slug, 'add');
+  }
+
+  private getFromLocalStorage(slug: string): BlogPost | null {
     try {
-      let manifest = { posts: [] };
-      
-      try {
-        const response = await fetch(`${this.basePath}/manifest.json`);
-        if (response.ok) {
-          manifest = await response.json();
-        }
-      } catch (error) {
-        console.log('Creating new manifest file');
-      }
-      
-      if (!manifest.posts.includes(slug)) {
-        manifest.posts.unshift(slug);
-      }
-      
-      await this.writeFile(`${this.basePath}/manifest.json`, JSON.stringify(manifest, null, 2));
+      const key = `${this.localStoragePrefix}${slug}`;
+      const data = localStorage.getItem(key);
+      return data ? JSON.parse(data) : null;
     } catch (error) {
-      console.error('Error updating manifest:', error);
+      console.error('Error getting from localStorage:', error);
+      return null;
     }
   }
 
-  private async removeFromManifest(slug: string): Promise<void> {
-    try {
-      const response = await fetch(`${this.basePath}/manifest.json`);
-      if (response.ok) {
-        const manifest = await response.json();
-        manifest.posts = manifest.posts.filter((s: string) => s !== slug);
-        await this.writeFile(`${this.basePath}/manifest.json`, JSON.stringify(manifest, null, 2));
-      }
-    } catch (error) {
-      console.error('Error removing from manifest:', error);
-    }
-  }
-
-  private async writeFile(path: string, content: string): Promise<void> {
-    // In a browser environment, we can't directly write files to the file system
-    // This would need to be handled by a backend service or file system API
-    // For now, we'll simulate this by using a service worker or local storage as fallback
-    
-    // Store in localStorage as a fallback for development
-    const key = `file_${path.replace(/[^a-zA-Z0-9]/g, '_')}`;
-    localStorage.setItem(key, content);
-    
-    console.log(`File would be created at: ${path}`);
-    console.log('Content:', content);
-  }
-
-  private async deleteFile(path: string): Promise<void> {
-    // In a browser environment, we can't directly delete files from the file system
-    // This would need to be handled by a backend service or file system API
-    
-    // Remove from localStorage as a fallback for development
-    const key = `file_${path.replace(/[^a-zA-Z0-9]/g, '_')}`;
+  private removeFromLocalStorage(slug: string): void {
+    const key = `${this.localStoragePrefix}${slug}`;
     localStorage.removeItem(key);
     
-    console.log(`File would be deleted at: ${path}`);
+    // Update the list of all post slugs
+    this.updateLocalStorageIndex(slug, 'remove');
   }
 
-  // For development, load from localStorage if files don't exist
-  async getAllPostsFromStorage(): Promise<BlogPost[]> {
+  private getAllFromLocalStorage(): BlogPost[] {
     try {
-      // Try to get manifest from localStorage first
-      const manifestKey = `file_${`${this.basePath}/manifest.json`.replace(/[^a-zA-Z0-9]/g, '_')}`;
-      const manifestData = localStorage.getItem(manifestKey);
+      const indexKey = `${this.localStoragePrefix}index`;
+      const indexData = localStorage.getItem(indexKey);
       
-      if (!manifestData) {
-        return this.getDefaultPosts();
-      }
+      if (!indexData) return [];
       
-      const manifest = JSON.parse(manifestData);
+      const slugs: string[] = JSON.parse(indexData);
       const posts: BlogPost[] = [];
       
-      for (const slug of manifest.posts) {
-        const fileKey = `file_${`${this.basePath}/${slug}.json`.replace(/[^a-zA-Z0-9]/g, '_')}`;
-        const postData = localStorage.getItem(fileKey);
-        if (postData) {
-          posts.push(JSON.parse(postData));
+      for (const slug of slugs) {
+        const post = this.getFromLocalStorage(slug);
+        if (post) {
+          posts.push(post);
         }
       }
       
-      return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      return posts;
     } catch (error) {
-      console.error('Error loading posts from storage:', error);
-      return this.getDefaultPosts();
+      console.error('Error getting all from localStorage:', error);
+      return [];
     }
+  }
+
+  private updateLocalStorageIndex(slug: string, action: 'add' | 'remove'): void {
+    try {
+      const indexKey = `${this.localStoragePrefix}index`;
+      const indexData = localStorage.getItem(indexKey);
+      let slugs: string[] = indexData ? JSON.parse(indexData) : [];
+      
+      if (action === 'add' && !slugs.includes(slug)) {
+        slugs.unshift(slug);
+      } else if (action === 'remove') {
+        slugs = slugs.filter(s => s !== slug);
+      }
+      
+      localStorage.setItem(indexKey, JSON.stringify(slugs));
+    } catch (error) {
+      console.error('Error updating localStorage index:', error);
+    }
+  }
+
+  // Method to clear all localStorage data (for development/testing)
+  clearAllLocalStorage(): void {
+    const keys = Object.keys(localStorage);
+    keys.forEach(key => {
+      if (key.startsWith(this.localStoragePrefix)) {
+        localStorage.removeItem(key);
+      }
+    });
   }
 }
 
