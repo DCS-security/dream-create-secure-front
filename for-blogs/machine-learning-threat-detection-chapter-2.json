@@ -1,0 +1,12 @@
+
+{
+  "id": "2",
+  "title": "Machine Learning Threat Detection - Chapter 2: Advanced Algorithms",
+  "excerpt": "Deep dive into machine learning algorithms that can identify and prevent sophisticated cyber threats.",
+  "content": "Machine learning algorithms are becoming increasingly sophisticated in their ability to detect and prevent cyber threats. This chapter explores the most effective approaches including supervised learning for known threat patterns, unsupervised learning for anomaly detection, and reinforcement learning for adaptive security systems.\n\nWe will examine real-world case studies where machine learning has successfully identified previously unknown threats, and discuss the implementation challenges organizations face when deploying these advanced security systems.",
+  "author": "Hitansh Shah",
+  "date": "2024-01-10",
+  "category": "ML Security",
+  "chapter": "2",
+  "slug": "machine-learning-threat-detection-chapter-2"
+}
