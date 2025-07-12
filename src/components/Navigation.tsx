@@ -20,33 +20,15 @@ const Navigation = () => {
   };
 
   const navItems = [
-    { label: 'Services', href: '#services', type: 'anchor' },
+    { label: 'Services', href: '/services', type: 'route' },
     { label: 'About Us', href: '/about-us', type: 'route' },
-    { label: 'Contact', href: '#contact', type: 'anchor' },
+    { label: 'Contact', href: '/contact', type: 'route' },
     { label: 'Blog', href: '/blog', type: 'route' },
   ];
 
   const handleNavClick = (item: any) => {
     setIsMenuOpen(false);
-
-    if (item.type === 'route') {
-      navigate(item.href);
-    } else if (item.type === 'anchor') {
-      if (location.pathname === '/') {
-        const element = document.querySelector(item.href);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }
-      } else {
-        navigate('/');
-        setTimeout(() => {
-          const element = document.querySelector(item.href);
-          if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
-          }
-        }, 100);
-      }
-    }
+    navigate(item.href);
   };
 
   return (

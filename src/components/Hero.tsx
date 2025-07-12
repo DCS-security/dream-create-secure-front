@@ -1,8 +1,11 @@
 
 import { ArrowRight, Shield, Brain, Code } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
 
 const Hero = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-cyber-gradient">
       {/* Background Effects */}
@@ -42,12 +45,21 @@ const Hero = () => {
           
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
-            <Button size="lg" className="bg-cyber-500 hover:bg-cyber-600 text-white px-8 py-3 text-lg group cyber-glow">
+            <Button 
+              size="lg" 
+              className="bg-cyber-500 hover:bg-cyber-600 text-white px-8 py-3 text-lg group cyber-glow"
+              onClick={() => navigate('/services')}
+            >
               Explore Our Services
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
-            <Button variant="outline" size="lg" className="border-cyber-400 text-cyber-400 hover:bg-cyber-400/10 px-8 py-3 text-lg">
-              Get Started
+            <Button 
+              variant="outline" 
+              size="lg" 
+              className="border-cyber-400 text-cyber-400 hover:bg-cyber-400/10 px-8 py-3 text-lg"
+              onClick={() => navigate('/contact')}
+            >
+              Get In Touch
             </Button>
           </div>
           

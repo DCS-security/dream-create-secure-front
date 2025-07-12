@@ -1,78 +1,78 @@
 
-import { CheckCircle, Shield, Brain, Code, Zap, Users, Cog, Rocket } from 'lucide-react';
+import { CheckCircle, Users, Clock, Award, Lightbulb, Target, Shield } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 const Features = () => {
   const features = [
     {
-      icon: Shield,
-      title: 'Advanced Security',
-      description: 'Comprehensive cybersecurity solutions with AI-powered threat detection and real-time monitoring.',
-      features: [
-        'AI-powered threat detection',
-        'Real-time security monitoring',
-        'Compliance management',
-        'Incident response automation'
-      ],
-      highlighted: false
-    },
-    {
-      icon: Brain,
-      title: 'AI/ML Integration',
-      description: 'Cutting-edge artificial intelligence and machine learning solutions for intelligent automation.',
-      features: [
-        'Custom AI model development',
-        'Predictive analytics',
-        'Natural language processing',
-        'Computer vision solutions'
-      ],
-      highlighted: true
-    },
-    {
-      icon: Code,
-      title: 'Full-Stack Development',
-      description: 'End-to-end software development from concept to deployment with modern technologies.',
-      features: [
-        'Web & mobile applications',
-        'Cloud-native architecture',
-        'API development',
-        'Legacy system modernization'
-      ],
-      highlighted: false
-    },
-    {
-      icon: Zap,
-      title: 'Performance Optimization',
-      description: 'High-performance solutions optimized for speed, scalability, and user experience.',
-      features: [
-        'Application performance tuning',
-        'Database optimization',
-        'CDN implementation',
-        'Load balancing strategies'
-      ],
-      highlighted: false
-    },
-    {
       icon: Users,
       title: 'Expert Team',
-      description: 'Dedicated team of specialists in cybersecurity, AI/ML, and software development.',
+      description: 'Our diverse team combines deep cybersecurity knowledge with cutting-edge AI and ML expertise.',
       features: [
         'Certified security professionals',
         'AI/ML specialists',
         'Full-stack developers',
-        '24/7 technical support'
+        'Industry veterans'
       ],
       highlighted: false
     },
     {
-      icon: Rocket,
-      title: 'Scalable Solutions',
-      description: 'Future-ready solutions designed to grow with your business and adapt to changing needs.',
+      icon: Clock,
+      title: 'On-Time Delivery',
+      description: 'We pride ourselves on delivering projects on schedule without compromising on quality.',
       features: [
-        'Microservices architecture',
-        'Auto-scaling infrastructure',
-        'Cloud deployment',
-        'Continuous integration'
+        'Agile project management',
+        'Regular progress updates',
+        'Milestone-based delivery',
+        'Transparent timelines'
+      ],
+      highlighted: true
+    },
+    {
+      icon: Award,
+      title: 'Proven Results',
+      description: 'Our track record speaks for itself - delivering successful projects across industries.',
+      features: [
+        'Client satisfaction guarantee',
+        'Post-deployment support',
+        'Performance optimization',
+        'Scalable solutions'
+      ],
+      highlighted: false
+    },
+    {
+      icon: Lightbulb,
+      title: 'Innovation First',
+      description: 'We continuously push the boundaries of what\'s possible in technology solutions.',
+      features: [
+        'Latest technology stack',
+        'Cutting-edge methodologies',
+        'Research-driven approach',
+        'Future-ready solutions'
+      ],
+      highlighted: false
+    },
+    {
+      icon: Target,
+      title: 'Mission-Driven',
+      description: 'We\'re committed to empowering businesses through secure and intelligent technology.',
+      features: [
+        'Client-focused approach',
+        'Business value creation',
+        'Long-term partnerships',
+        'Strategic consulting'
+      ],
+      highlighted: false
+    },
+    {
+      icon: Shield,
+      title: '24/7 Support',
+      description: 'Round-the-clock technical support and maintenance for your peace of mind.',
+      features: [
+        'Always-on monitoring',
+        'Rapid response times',
+        'Proactive maintenance',
+        'Emergency support'
       ],
       highlighted: false
     },
@@ -104,14 +104,6 @@ const Features = () => {
                 } backdrop-blur-sm animate-fade-in`}
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                {feature.highlighted && (
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <span className="bg-cyber-500 text-white px-4 py-1 rounded-full text-sm font-medium">
-                      Featured
-                    </span>
-                  </div>
-                )}
-                
                 <CardHeader>
                   <div className="flex justify-center mb-4">
                     <div className={`p-3 rounded-lg ${feature.highlighted ? 'bg-cyber-500/20' : 'bg-cyber-500/10'}`}>

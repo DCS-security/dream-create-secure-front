@@ -5,10 +5,12 @@ import { Link } from 'react-router-dom';
 const Footer = () => {
   const footerLinks = {
     Solutions: [
-      'Threat Detection',
-      'Security Assessment',
-      'AI Platform',
-      'Secure Development'
+      'Cybersecurity Services',
+      'AI/ML Development',
+      'Custom Software',
+      'Mobile Applications',
+      'Web Development',
+      'Data Analytics'
     ],
     Company: [
       'Our Team'
@@ -35,7 +37,7 @@ const Footer = () => {
               </span>
             </div>
             <p className="text-muted-foreground mb-6 max-w-md">
-              Pioneering the future of cybersecurity through AI, ML, and innovative security solutions. 
+              Pioneering the future of technology through cybersecurity, AI/ML, and innovative software solutions. 
               Dream. Create. Secure.
             </p>
             <div className="space-y-3">
@@ -96,7 +98,7 @@ const Footer = () => {
         <div className="border-t border-border/50 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-sm text-muted-foreground">
-              © 2024 DCS. All rights reserved.
+              © 2025 Devansh Cyber Sec. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <a href="#" className="text-sm text-muted-foreground hover:text-cyber-400 transition-colors">
