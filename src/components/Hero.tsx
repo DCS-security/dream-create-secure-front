@@ -34,20 +34,20 @@ const Hero = () => {
           
           {/* Description */}
           <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-4xl mx-auto leading-relaxed">
-            Building next-generation cybersecurity solutions through the convergence of 
-            <span className="text-cyber-400 font-semibold"> AI</span>, 
-            <span className="text-cyber-300 font-semibold"> Machine Learning</span>, and 
-            <span className="text-cyber-500 font-semibold"> Advanced Security</span> for smarter software development.
+            Comprehensive technology solutions combining 
+            <span className="text-cyber-400 font-semibold"> Cybersecurity</span>, 
+            <span className="text-cyber-300 font-semibold"> AI/ML Development</span>, and 
+            <span className="text-cyber-500 font-semibold"> Custom Software Solutions</span> for modern businesses.
           </p>
           
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
             <Button size="lg" className="bg-cyber-500 hover:bg-cyber-600 text-white px-8 py-3 text-lg group cyber-glow">
-              Explore Our Solutions
+              Explore Our Services
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
             <Button variant="outline" size="lg" className="border-cyber-400 text-cyber-400 hover:bg-cyber-400/10 px-8 py-3 text-lg">
-              Learn More
+              Get Started
             </Button>
           </div>
           
@@ -57,24 +57,24 @@ const Hero = () => {
               <div className="p-4 rounded-full bg-cyber-500/10 border border-cyber-500/20 mb-4 group-hover:bg-cyber-500/20 transition-colors">
                 <Shield className="h-8 w-8 text-cyber-500" />
               </div>
-              <h3 className="text-lg font-semibold text-cyber-400">Advanced Security</h3>
-              <p className="text-sm text-muted-foreground">Cutting-edge protection</p>
+              <h3 className="text-lg font-semibold text-cyber-400">Cybersecurity</h3>
+              <p className="text-sm text-muted-foreground">Advanced security solutions</p>
             </div>
             
             <div className="flex flex-col items-center group">
               <div className="p-4 rounded-full bg-cyber-400/10 border border-cyber-400/20 mb-4 group-hover:bg-cyber-400/20 transition-colors">
                 <Brain className="h-8 w-8 text-cyber-400" />
               </div>
-              <h3 className="text-lg font-semibold text-cyber-300">AI-Powered</h3>
-              <p className="text-sm text-muted-foreground">Machine learning integration</p>
+              <h3 className="text-lg font-semibold text-cyber-300">AI/ML Solutions</h3>
+              <p className="text-sm text-muted-foreground">Intelligent automation</p>
             </div>
             
             <div className="flex flex-col items-center group">
               <div className="p-4 rounded-full bg-cyber-300/10 border border-cyber-300/20 mb-4 group-hover:bg-cyber-300/20 transition-colors">
                 <Code className="h-8 w-8 text-cyber-300" />
               </div>
-              <h3 className="text-lg font-semibold text-cyber-500">Smart Development</h3>
-              <p className="text-sm text-muted-foreground">Intelligent software solutions</p>
+              <h3 className="text-lg font-semibold text-cyber-500">Custom Development</h3>
+              <p className="text-sm text-muted-foreground">Tailored software solutions</p>
             </div>
           </div>
         </div>

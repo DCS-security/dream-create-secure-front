@@ -1,52 +1,97 @@
 
-import { CheckCircle, Shield, Brain, Code } from 'lucide-react';
+import { CheckCircle, Shield, Brain, Code, Smartphone, Globe, Database } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 const Services = () => {
   const services = [
     {
-      title: 'Cyber Security Products',
-      description: 'Enterprise-grade cybersecurity solutions for corporates',
+      title: 'Cybersecurity Solutions',
+      description: 'Comprehensive security services to protect your digital assets',
       icon: Shield,
       features: [
-        'Advanced threat protection',
-        'Real-time monitoring systems',
-        'Enterprise security suites',
-        'Compliance management tools',
-        'Security incident response',
-        'Risk management platforms'
+        'Penetration Testing & Vulnerability Assessments',
+        'Security Audits & Compliance',
+        'Incident Response & Forensics',
+        'Security Architecture Design',
+        'Email Security Solutions',
+        'Zero-Trust Implementation'
       ],
       price: 'Enterprise',
       highlighted: false
     },
     {
-      title: 'AI/ML Security Assessment',
-      description: 'Cybersecurity assessment using AI and ML intelligence',
+      title: 'AI/ML Development',
+      description: 'Intelligent solutions powered by machine learning and artificial intelligence',
       icon: Brain,
       features: [
-        'AI-powered vulnerability scanning',
-        'Machine learning threat detection',
-        'Intelligent risk analysis',
-        'Automated security reporting',
-        'Predictive threat modeling',
-        'Smart anomaly detection'
+        'Custom AI Model Development',
+        'Machine Learning Integration',
+        'Natural Language Processing',
+        'Computer Vision Solutions',
+        'Predictive Analytics',
+        'AI-powered Automation'
       ],
       price: 'Custom Quote',
       highlighted: true
     },
     {
       title: 'Custom Software Development',
-      description: 'Customize software development for any cyber needs',
+      description: 'Tailored software solutions for your unique business needs',
       icon: Code,
       features: [
-        'Tailored security solutions',
-        'Custom application development',
-        'Security-first architecture',
-        'Integration with existing systems',
-        'Scalable cyber solutions',
-        'Ongoing support & maintenance'
+        'Full-Stack Web Development',
+        'Enterprise Application Development',
+        'API Development & Integration',
+        'Legacy System Modernization',
+        'Cloud-Native Applications',
+        'DevOps & CI/CD Implementation'
       ],
       price: 'Project-based',
+      highlighted: false
+    },
+    {
+      title: 'Mobile App Development',
+      description: 'Native and cross-platform mobile applications',
+      icon: Smartphone,
+      features: [
+        'iOS & Android Development',
+        'Cross-Platform Solutions',
+        'Mobile UI/UX Design',
+        'App Store Optimization',
+        'Mobile Security Integration',
+        'Performance Optimization'
+      ],
+      price: 'Custom Quote',
+      highlighted: false
+    },
+    {
+      title: 'Web Development',
+      description: 'Modern, responsive web applications and websites',
+      icon: Globe,
+      features: [
+        'Responsive Web Design',
+        'E-commerce Development',
+        'Progressive Web Apps (PWA)',
+        'SEO Optimization',
+        'Performance Optimization',
+        'Content Management Systems'
+      ],
+      price: 'Project-based',
+      highlighted: false
+    },
+    {
+      title: 'Data Analytics & BI',
+      description: 'Transform your data into actionable business insights',
+      icon: Database,
+      features: [
+        'Data Visualization Dashboards',
+        'Business Intelligence Solutions',
+        'Data Pipeline Development',
+        'Real-time Analytics',
+        'Data Warehouse Design',
+        'Reporting & KPI Tracking'
+      ],
+      price: 'Custom Quote',
       highlighted: false
     }
   ];
@@ -59,12 +104,12 @@ const Services = () => {
             Our Services
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Comprehensive cybersecurity solutions combining AI, ML, and advanced security 
-            for smarter software development and enterprise protection.
+            From cybersecurity to AI/ML development and custom software solutions - 
+            we provide comprehensive technology services to accelerate your business.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, index) => {
             const IconComponent = service.icon;
             return (
@@ -91,14 +136,14 @@ const Services = () => {
                       <IconComponent className={`h-8 w-8 ${service.highlighted ? 'text-cyber-400' : 'text-cyber-500'}`} />
                     </div>
                   </div>
-                  <CardTitle className={`text-2xl font-bold ${service.highlighted ? 'text-cyber-400' : ''}`}>
+                  <CardTitle className={`text-xl font-bold ${service.highlighted ? 'text-cyber-400' : ''}`}>
                     {service.title}
                   </CardTitle>
                   <CardDescription className="text-base">
                     {service.description}
                   </CardDescription>
                   <div className="pt-4">
-                    <span className={`text-3xl font-bold ${service.highlighted ? 'text-cyber-400' : 'text-foreground'}`}>
+                    <span className={`text-2xl font-bold ${service.highlighted ? 'text-cyber-400' : 'text-foreground'}`}>
                       {service.price}
                     </span>
                   </div>
@@ -108,7 +153,7 @@ const Services = () => {
                   <ul className="space-y-3">
                     {service.features.map((feature) => (
                       <li key={feature} className="flex items-center space-x-3">
-                        <CheckCircle className={`h-5 w-5 ${service.highlighted ? 'text-cyber-400' : 'text-cyber-500'}`} />
+                        <CheckCircle className={`h-4 w-4 ${service.highlighted ? 'text-cyber-400' : 'text-cyber-500'} flex-shrink-0`} />
                         <span className="text-sm">{feature}</span>
                       </li>
                     ))}

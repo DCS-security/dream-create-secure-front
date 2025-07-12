@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -19,11 +20,9 @@ const Navigation = () => {
   };
 
   const navItems = [
-    { label: 'Home', href: '/', type: 'route' },
-    { label: 'Solutions', href: '#solutions', type: 'anchor' },
     { label: 'Services', href: '#services', type: 'anchor' },
-    { label: 'Contact', href: '#contact', type: 'anchor' },
     { label: 'About Us', href: '/about-us', type: 'route' },
+    { label: 'Contact', href: '#contact', type: 'anchor' },
     { label: 'Blog', href: '/blog', type: 'route' },
   ];
 
@@ -56,7 +55,7 @@ const Navigation = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <button
-            onClick={() => handleNavClick({ href: '/', type: 'route' })}
+            onClick={() => navigate('/')}
             className="flex items-center space-x-2 flex-shrink-0"
           >
             <img

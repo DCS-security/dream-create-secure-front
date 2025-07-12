@@ -1,93 +1,93 @@
 
-import { CheckCircle, Shield, Brain, Code, Zap, Lock, Users } from 'lucide-react';
+import { CheckCircle, Shield, Brain, Code, Zap, Users, Cog, Rocket } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 const Features = () => {
   const features = [
     {
       icon: Shield,
-      title: 'Auditors Dashboard',
-      description: 'Comprehensive security auditing platform with real-time insights and detailed reporting capabilities.',
+      title: 'Advanced Security',
+      description: 'Comprehensive cybersecurity solutions with AI-powered threat detection and real-time monitoring.',
       features: [
+        'AI-powered threat detection',
         'Real-time security monitoring',
-        'Compliance tracking dashboard',
-        'Automated audit reports',
-        'Risk assessment analytics'
+        'Compliance management',
+        'Incident response automation'
       ],
       highlighted: false
     },
     {
       icon: Brain,
-      title: 'Machine Learning Integration',
-      description: 'Sophisticated ML algorithms that learn from patterns and behaviors to predict and prevent security breaches.',
+      title: 'AI/ML Integration',
+      description: 'Cutting-edge artificial intelligence and machine learning solutions for intelligent automation.',
       features: [
-        'Behavioral pattern analysis',
-        'Predictive threat modeling',
-        'Intelligent anomaly detection',
-        'Automated learning systems'
+        'Custom AI model development',
+        'Predictive analytics',
+        'Natural language processing',
+        'Computer vision solutions'
       ],
       highlighted: true
     },
     {
       icon: Code,
-      title: 'Secure Development',
-      description: 'Tools and frameworks that embed security into every stage of the software development lifecycle.',
+      title: 'Full-Stack Development',
+      description: 'End-to-end software development from concept to deployment with modern technologies.',
       features: [
-        'Security code analysis',
-        'Vulnerability scanning',
-        'Secure coding guidelines',
-        'DevSecOps integration'
+        'Web & mobile applications',
+        'Cloud-native architecture',
+        'API development',
+        'Legacy system modernization'
       ],
       highlighted: false
     },
     {
       icon: Zap,
-      title: 'Mail Security Solution',
-      description: 'Advanced email protection system that safeguards against phishing, malware, and other email-based threats.',
+      title: 'Performance Optimization',
+      description: 'High-performance solutions optimized for speed, scalability, and user experience.',
       features: [
-        'Email threat detection',
-        'Phishing protection',
-        'Malware scanning',
-        'Safe link verification'
-      ],
-      highlighted: false
-    },
-    {
-      icon: Lock,
-      title: 'Zero-Trust Architecture',
-      description: 'Comprehensive security models that verify every user and device, regardless of their location or credentials.',
-      features: [
-        'Identity verification',
-        'Device authentication',
-        'Network segmentation',
-        'Access control policies'
+        'Application performance tuning',
+        'Database optimization',
+        'CDN implementation',
+        'Load balancing strategies'
       ],
       highlighted: false
     },
     {
       icon: Users,
-      title: 'Expert Consultation',
-      description: 'Access to our team of cybersecurity experts who provide strategic guidance and implementation support.',
+      title: 'Expert Team',
+      description: 'Dedicated team of specialists in cybersecurity, AI/ML, and software development.',
       features: [
-        'Security strategy consulting',
-        'Implementation guidance',
-        'Training and support',
-        'Ongoing maintenance'
+        'Certified security professionals',
+        'AI/ML specialists',
+        'Full-stack developers',
+        '24/7 technical support'
+      ],
+      highlighted: false
+    },
+    {
+      icon: Rocket,
+      title: 'Scalable Solutions',
+      description: 'Future-ready solutions designed to grow with your business and adapt to changing needs.',
+      features: [
+        'Microservices architecture',
+        'Auto-scaling infrastructure',
+        'Cloud deployment',
+        'Continuous integration'
       ],
       highlighted: false
     },
   ];
 
   return (
-    <section id="solutions" className="py-24 bg-muted/20">
+    <section className="py-24 bg-muted/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-cyber-400 to-cyber-500 bg-clip-text text-transparent">
-            Our Solutions
+            Why Choose DCS
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Comprehensive cybersecurity solutions powered by artificial intelligence and machine learning, 
-            designed to protect your digital assets and enable secure innovation.
+            Combining expertise in cybersecurity, AI/ML, and software development to deliver 
+            comprehensive technology solutions that drive business growth.
           </p>
         </div>
 
