@@ -21,7 +21,7 @@ const Hero = () => {
             <img 
               src="/lovable-uploads/9b69c3c2-8f00-47ff-92a2-f35ea746a04c.png" 
               alt="DCS Logo" 
-              className="h-16 w-16 md:h-20 md:w-20"
+              className="h-16 w-auto md:h-20"
             />
             <h1 className="text-6xl md:text-8xl font-bold bg-gradient-to-r from-cyber-400 via-cyber-300 to-cyber-500 bg-clip-text text-transparent">
               DCS

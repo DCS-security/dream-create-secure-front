@@ -30,7 +30,7 @@ const Footer = () => {
               <img 
                 src="/lovable-uploads/9b69c3c2-8f00-47ff-92a2-f35ea746a04c.png" 
                 alt="DCS Logo" 
-                className="h-6 w-6"
+                className="h-8 w-auto"
               />
               <span className="text-2xl font-bold bg-gradient-to-r from-cyber-400 to-cyber-500 bg-clip-text text-transparent">
                 DCS
