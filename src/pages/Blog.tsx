@@ -5,11 +5,11 @@ import Footer from '@/components/Footer';
 import BlogCard from '@/components/BlogCard';
 import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { useLocalBlogStorage } from '@/hooks/useLocalBlogStorage';
+import { useCentralBlogStorage } from '@/hooks/useCentralBlogStorage';
 
 const Blog = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const { posts, isLoading } = useLocalBlogStorage();
+  const { posts, isLoading } = useCentralBlogStorage();
 
   const filteredPosts = posts.filter(post =>
     post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||

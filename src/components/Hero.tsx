@@ -37,10 +37,10 @@ const Hero = () => {
           
           {/* Description */}
           <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-4xl mx-auto leading-relaxed">
-            Comprehensive technology solutions combining 
-            <span className="text-cyber-400 font-semibold"> Cybersecurity</span>, 
-            <span className="text-cyber-300 font-semibold"> AI/ML Development</span>, and 
-            <span className="text-cyber-500 font-semibold"> Custom Software Solutions</span> for modern businesses.
+            Empowering enterprises with next-generation technology solutions. We specialize in 
+            <span className="text-cyber-400 font-semibold"> enterprise cybersecurity</span>, 
+            <span className="text-cyber-300 font-semibold"> intelligent automation</span>, and 
+            <span className="text-cyber-500 font-semibold"> scalable software architecture</span>.
           </p>
           
           {/* CTA Buttons */}

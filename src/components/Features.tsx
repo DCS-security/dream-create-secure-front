@@ -83,11 +83,11 @@ const Features = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-cyber-400 to-cyber-500 bg-clip-text text-transparent">
-            Why Choose DCS
+            Enterprise Excellence
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Combining expertise in cybersecurity, AI/ML, and software development to deliver 
-            comprehensive technology solutions that drive business growth.
+            Trusted by industry leaders for our uncompromising commitment to security, 
+            innovation, and operational excellence in technology transformation.
           </p>
         </div>
 

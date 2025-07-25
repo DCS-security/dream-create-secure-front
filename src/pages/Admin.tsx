@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Shield, Edit, Plus, Trash2, Eye, Settings, RefreshCw } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { useLocalBlogStorage } from '@/hooks/useLocalBlogStorage';
+import { useCentralBlogStorage } from '@/hooks/useCentralBlogStorage';
 import { useContentStorage } from '@/hooks/useContentStorage';
 import BlogPostDialog from '@/components/BlogPostDialog';
 import ContentEditDialog from '@/components/ContentEditDialog';
@@ -19,7 +19,7 @@ const Admin = () => {
   const [contentDialogOpen, setContentDialogOpen] = useState(false);
   const [editingSection, setEditingSection] = useState('');
   const { toast } = useToast();
-  const { posts, isLoading, addPost, updatePost, deletePost, refreshPosts } = useLocalBlogStorage();
+  const { posts, isLoading, addPost, updatePost, deletePost, refreshPosts } = useCentralBlogStorage();
   const { sections } = useContentStorage();
 
   const handleLogin = (e?: React.FormEvent) => {
