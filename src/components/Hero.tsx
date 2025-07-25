@@ -8,10 +8,21 @@ const Hero = () => {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-cyber-gradient">
+      {/* Background Image */}
+      <div 
+        className="absolute inset-0 opacity-10"
+        style={{
+          backgroundImage: `url('https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=2000&q=80')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed'
+        }}
+      ></div>
+      
       {/* Background Effects */}
       <div className="absolute inset-0 bg-cyber-glow"></div>
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyber-500/10 rounded-full blur-3xl animate-float"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyber-400/5 rounded-full blur-3xl animate-float" style={{ animationDelay: '3s' }}></div>
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyber-500/15 rounded-full blur-3xl animate-float"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyber-400/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '3s' }}></div>
       
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -37,10 +48,11 @@ const Hero = () => {
           
           {/* Description */}
           <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-4xl mx-auto leading-relaxed">
-            Empowering enterprises with next-generation technology solutions. We specialize in 
-            <span className="text-cyber-400 font-semibold"> enterprise cybersecurity</span>, 
-            <span className="text-cyber-300 font-semibold"> intelligent automation</span>, and 
-            <span className="text-cyber-500 font-semibold"> scalable software architecture</span>.
+            Leading provider of 
+            <span className="text-cyber-400 font-semibold"> AI-powered cybersecurity solutions</span>, 
+            <span className="text-cyber-300 font-semibold"> machine learning development</span>, and 
+            <span className="text-cyber-500 font-semibold"> enterprise software engineering</span>.
+            Transforming businesses with intelligent threat detection and custom AI applications.
           </p>
           
           {/* CTA Buttons */}

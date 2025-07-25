@@ -79,15 +79,26 @@ const Features = () => {
   ];
 
   return (
-    <section className="py-24 bg-muted/20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-24 bg-muted/20 relative overflow-hidden">
+      {/* Background Image */}
+      <div 
+        className="absolute inset-0 opacity-5"
+        style={{
+          backgroundImage: `url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=2000&q=80')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
+      ></div>
+      
+      <div className="absolute inset-0 bg-gradient-to-br from-cyber-400/10 via-transparent to-cyber-500/10"></div>
+      
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-cyber-400 to-cyber-500 bg-clip-text text-transparent">
-            Enterprise Excellence
+            AI Cybersecurity Excellence
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Trusted by industry leaders for our uncompromising commitment to security, 
-            innovation, and operational excellence in technology transformation.
+            Industry-leading artificial intelligence and machine learning solutions for cybersecurity, threat detection, and custom software development that drives enterprise digital transformation.
           </p>
         </div>
 
