@@ -26,9 +26,34 @@ const Contact = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Form submitted:', formData);
+     try {
+    const res = await fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
+    });
+
+    const result = await res.json();
+
+    if (res.ok) {
+      alert('Your message has been sent successfully!');
+      setFormData({
+        name: '',
+        organization: '',
+        email: '',
+        phone: '',
+        message: ''
+      });
+    } else {
+      alert(result.message || 'Something went wrong. Try again.');
+    }
+  } catch (error) {
+    console.error('Error submitting form:', error);
+    alert('Server error. Please try again later.');
+  }
     // Handle form submission logic here
   };
 
